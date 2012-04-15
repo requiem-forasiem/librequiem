@@ -1,0 +1,122 @@
+#!/bin/sh
+
+prefix=@prefix@
+requiem_conf_prefix=@REQUIEM_CONFIG_DIR@
+exec_prefix=@exec_prefix@
+exec_prefix_set=no
+cpp_set=no
+thread_set=yes
+want_libs=no
+want_cflags=no
+
+usage="\
+Usage: librequiem-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--config-prefix] [--version] [--c++] [--libs] [--ldflags] [--cflags] [--pthread-cflags]"
+
+if test $# -eq 0; then
+      echo "${usage}" 1>&2
+      exit 1
+fi
+
+while test $# -gt 0; do
+  case "$1" in
+  -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+  *) optarg= ;;
+  esac
+
+  case $1 in
+    --prefix=*)
+      prefix=$optarg
+      if test $exec_prefix_set = no ; then
+        exec_prefix=$optarg
+      fi
+      ;;
+
+    --prefix)
+      echo $prefix
+      ;;
+
+    --exec-prefix=*)
+      exec_prefix=$optarg
+      exec_prefix_set=yes
+      ;;
+
+    --exec-prefix)
+      echo $exec_prefix
+      ;;
+
+    --config-prefix)
+      echo $requiem_conf_prefix
+      ;;
+
+    --version)
+      echo @VERSION@
+      ;;
+
+    --no-thread)
+      thread_set=no
+      ;;
+
+    --thread)
+      thread_set=yes
+      ;;
+
+    --cflags)
+      want_cflags=yes
+      ;;
+
+    --pthread-cflags)
+      thread_set=yes
+      want_cflags=yes
+      ;;
+
+    --ldflags)
+      ;;
+
+    --c++)
+      cpp_set=yes
+      ;;
+
+    --libs)
+      want_libs=yes
+      ;;
+
+    *)
+      echo "${usage}" 1>&2
+      exit 1
+      ;;
+
+  esac
+  shift
+done
+
+
+if test $want_cflags = yes; then
+      flags=""
+      if test @includedir@ != /usr/include ; then
+        flags=-I@includedir@
+      fi
+      if test $thread_set = yes; then
+              flags=$flags
+      fi
+
+      echo @LIBREQUIEM_CFLAGS@ $flags
+fi
+
+
+if test $want_libs = yes; then
+      libdirs=-L@libdir@
+      cpplibs=""
+      if test $cpp_set = yes; then
+              cpplibs="$libdirs -lrequiemcpp"
+      fi
+
+      if test $thread_set = yes; then
+              thrlibs=@LTLIBMULTITHREAD@
+      else
+              thrlibs=@LTLIBTHREAD@
+      fi
+
+      echo $cpplibs $libdirs -lrequiem @LIBREQUIEM_LIBS@ @LIBADD_DL@ $thrlibs @GETADDRINFO_LIB@ @GETHOSTNAME_LIB@ @HOSTENT_LIB@ @INET_NTOP_LIB@ @INET_PTON_LIB@ @LIBSOCKET@ @LTLIBINTL@ @SERVENT_LIB@
+fi
+
+exit 0

@@ -1,0 +1,7689 @@
+<!-- ##### SECTION Title ##### -->
+idmef-tree-wrap
+
+<!-- ##### SECTION Short_Description ##### -->
+
+Generating events using the low level IDMEF API
+
+<!-- ##### SECTION Long_Description ##### -->
+
+<para>
+
+The IDMEF API is used by a sensor in order to generate events.  IDMEF is an alert description
+format allowing almost any alert information to fit within an IDMEF alert, independantly of the
+type of analyzer used.
+
+</para>
+
+<para> 
+Here is real world example taken from the Snort Requiem sensors. The top level IDMEF object is always 
+of type #idmef_message_t. You should refer to the <ulink url="http://www.ietf.org/internet-drafts/draft-ietf-idwg-idmef-xml-14.txt">IDMEF draft</ulink>, or to the Requiem API documentation in order to get a complete 
+listing of theses objects, or a description of what information an object may carry.
+
+<programlisting>
+void snort_alert_requiem(Packet *p, char *msg, void *data, Event *event)
+{
+        int ret;
+        idmef_time_t *time;
+        idmef_alert_t *alert;
+        requiem_string_t *str;
+        idmef_message_t *idmef;
+        idmef_classification_t *class;
+        requiem_client_t *client = data;
+        
+        ret = idmef_message_new(&amp;idmef);
+        if ( ret &lt; 0 )
+                return;
+
+        ret = idmef_message_new_alert(idmef, &amp;alert);
+        if ( ret &lt; 0 )
+                goto err;
+
+        ret = idmef_alert_new_classification(alert, &amp;class);
+        if ( ret &lt; 0 )
+                goto err;
+
+        ret = idmef_classification_new_text(class, &amp;str);
+        if ( ret &lt; 0 )
+                goto err;
+
+        requiem_string_set_ref(str, msg);
+
+        ret = event_to_impact(event, alert);
+        if ( ret &lt; 0 )
+                goto err;
+
+        ret = event_to_reference(event, class);
+        if ( ret &lt; 0 )
+                goto err;
+        
+        ret = event_to_source_target(p, alert);
+        if ( ret &lt; 0 )
+                goto err;
+        
+        ret = packet_to_data(p, event, alert);
+        if ( ret &lt; 0 )
+                goto err;
+        
+        ret = idmef_alert_new_detect_time(alert, &amp;time);
+        if ( ret &lt; 0 )
+                goto err;
+        idmef_time_set_from_timeval(time, &amp;p->pkth->ts);
+        
+        ret = idmef_time_new_from_gettimeofday(&amp;time);
+        if ( ret &lt; 0 )
+                goto err; 
+        idmef_alert_set_create_time(alert, time);
+                
+        idmef_alert_set_analyzer(alert, idmef_analyzer_ref(requiem_client_get_analyzer(client)), 0);
+        requiem_client_send_idmef(client, idmef);
+                
+ err:
+        idmef_message_destroy(idmef);
+	requiem_perror(ret, "Unable to create IDMEF alert");
+}
+</programlisting>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+#idmef_path_t for the high level IDMEF API.
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### MACRO IDMEF_LIST_APPEND ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_LIST_PREPEND ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION idmef_message_get_data ##### -->
+<para>
+
+</para>
+
+@message: 
+@path: 
+@data: 
+@size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_get_number ##### -->
+<para>
+
+</para>
+
+@message: 
+@path: 
+@result: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_get_string ##### -->
+<para>
+
+</para>
+
+@message: 
+@path: 
+@result: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_get_value ##### -->
+<para>
+
+</para>
+
+@message: 
+@path: 
+@value: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_set_data ##### -->
+<para>
+
+</para>
+
+@message: 
+@path: 
+@data: 
+@size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_set_number ##### -->
+<para>
+
+</para>
+
+@message: 
+@path: 
+@number: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_set_string ##### -->
+<para>
+
+</para>
+
+@message: 
+@path: 
+@value: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_set_value ##### -->
+<para>
+
+</para>
+
+@message: 
+@path: 
+@value: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_additional_data_type_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_ADDITIONAL_DATA_TYPE_ERROR: 
+@IDMEF_ADDITIONAL_DATA_TYPE_STRING: 
+@IDMEF_ADDITIONAL_DATA_TYPE_BYTE: 
+@IDMEF_ADDITIONAL_DATA_TYPE_CHARACTER: 
+@IDMEF_ADDITIONAL_DATA_TYPE_DATE_TIME: 
+@IDMEF_ADDITIONAL_DATA_TYPE_INTEGER: 
+@IDMEF_ADDITIONAL_DATA_TYPE_NTPSTAMP: 
+@IDMEF_ADDITIONAL_DATA_TYPE_PORTLIST: 
+@IDMEF_ADDITIONAL_DATA_TYPE_REAL: 
+@IDMEF_ADDITIONAL_DATA_TYPE_BOOLEAN: 
+@IDMEF_ADDITIONAL_DATA_TYPE_BYTE_STRING: 
+@IDMEF_ADDITIONAL_DATA_TYPE_XML: 
+
+<!-- ##### FUNCTION idmef_additional_data_type_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_type_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_additional_data_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_additional_data_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_ref ##### -->
+<para>
+
+</para>
+
+@additional_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_get_type ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_set_type ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@type: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_new_type ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_get_meaning ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_set_meaning ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@meaning: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_new_meaning ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_get_data ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_set_data ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@data: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_new_data ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_reference_origin_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_REFERENCE_ORIGIN_ERROR: 
+@IDMEF_REFERENCE_ORIGIN_UNKNOWN: 
+@IDMEF_REFERENCE_ORIGIN_VENDOR_SPECIFIC: 
+@IDMEF_REFERENCE_ORIGIN_USER_SPECIFIC: 
+@IDMEF_REFERENCE_ORIGIN_BUGTRAQID: 
+@IDMEF_REFERENCE_ORIGIN_CVE: 
+@IDMEF_REFERENCE_ORIGIN_OSVDB: 
+
+<!-- ##### FUNCTION idmef_reference_origin_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_reference_origin_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_reference_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_reference_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_reference_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_reference_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_reference_ref ##### -->
+<para>
+
+</para>
+
+@reference: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_reference_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_reference_get_origin ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_reference_set_origin ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@origin: 
+
+
+<!-- ##### FUNCTION idmef_reference_new_origin ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_reference_get_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_reference_set_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@name: 
+
+
+<!-- ##### FUNCTION idmef_reference_new_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_reference_get_url ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_reference_set_url ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@url: 
+
+
+<!-- ##### FUNCTION idmef_reference_new_url ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_reference_get_meaning ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_reference_set_meaning ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@meaning: 
+
+
+<!-- ##### FUNCTION idmef_reference_new_meaning ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_classification_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_classification_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_classification_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_classification_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_classification_ref ##### -->
+<para>
+
+</para>
+
+@classification: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_classification_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_classification_get_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_classification_set_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ident: 
+
+
+<!-- ##### FUNCTION idmef_classification_new_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_classification_get_text ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_classification_set_text ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@text: 
+
+
+<!-- ##### FUNCTION idmef_classification_new_text ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_classification_get_next_reference ##### -->
+<para>
+
+</para>
+
+@classification: 
+@reference_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_classification_set_reference ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_classification_new_reference ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_user_id_type_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_USER_ID_TYPE_ORIGINAL_ERROR: 
+@IDMEF_USER_ID_TYPE_ORIGINAL_USER: 
+@IDMEF_USER_ID_TYPE_CURRENT_USER: 
+@IDMEF_USER_ID_TYPE_TARGET_USER: 
+@IDMEF_USER_ID_TYPE_USER_PRIVS: 
+@IDMEF_USER_ID_TYPE_CURRENT_GROUP: 
+@IDMEF_USER_ID_TYPE_GROUP_PRIVS: 
+@IDMEF_USER_ID_TYPE_OTHER_PRIVS: 
+
+<!-- ##### FUNCTION idmef_user_id_type_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_id_type_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_user_id_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_user_id_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_id_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_id_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_id_ref ##### -->
+<para>
+
+</para>
+
+@user_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_id_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_user_id_get_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_id_set_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ident: 
+
+
+<!-- ##### FUNCTION idmef_user_id_new_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_id_get_type ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_id_set_type ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@type: 
+
+
+<!-- ##### FUNCTION idmef_user_id_new_type ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_id_get_tty ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_id_set_tty ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@tty: 
+
+
+<!-- ##### FUNCTION idmef_user_id_new_tty ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_id_get_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_id_set_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@name: 
+
+
+<!-- ##### FUNCTION idmef_user_id_new_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_id_unset_number ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_user_id_get_number ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_id_set_number ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@number: 
+
+
+<!-- ##### FUNCTION idmef_user_id_new_number ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_user_category_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_USER_CATEGORY_ERROR: 
+@IDMEF_USER_CATEGORY_UNKNOWN: 
+@IDMEF_USER_CATEGORY_APPLICATION: 
+@IDMEF_USER_CATEGORY_OS_DEVICE: 
+
+<!-- ##### FUNCTION idmef_user_category_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_category_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_user_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_user_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_ref ##### -->
+<para>
+
+</para>
+
+@user: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_user_get_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_set_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ident: 
+
+
+<!-- ##### FUNCTION idmef_user_new_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_get_category ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_set_category ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@category: 
+
+
+<!-- ##### FUNCTION idmef_user_new_category ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_get_next_user_id ##### -->
+<para>
+
+</para>
+
+@user: 
+@user_id_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_set_user_id ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_user_new_user_id ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_address_category_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_ADDRESS_CATEGORY_ERROR: 
+@IDMEF_ADDRESS_CATEGORY_UNKNOWN: 
+@IDMEF_ADDRESS_CATEGORY_ATM: 
+@IDMEF_ADDRESS_CATEGORY_E_MAIL: 
+@IDMEF_ADDRESS_CATEGORY_LOTUS_NOTES: 
+@IDMEF_ADDRESS_CATEGORY_MAC: 
+@IDMEF_ADDRESS_CATEGORY_SNA: 
+@IDMEF_ADDRESS_CATEGORY_VM: 
+@IDMEF_ADDRESS_CATEGORY_IPV4_ADDR: 
+@IDMEF_ADDRESS_CATEGORY_IPV4_ADDR_HEX: 
+@IDMEF_ADDRESS_CATEGORY_IPV4_NET: 
+@IDMEF_ADDRESS_CATEGORY_IPV4_NET_MASK: 
+@IDMEF_ADDRESS_CATEGORY_IPV6_ADDR: 
+@IDMEF_ADDRESS_CATEGORY_IPV6_ADDR_HEX: 
+@IDMEF_ADDRESS_CATEGORY_IPV6_NET: 
+@IDMEF_ADDRESS_CATEGORY_IPV6_NET_MASK: 
+
+<!-- ##### FUNCTION idmef_address_category_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_address_category_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_address_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_address_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_address_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_address_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_address_ref ##### -->
+<para>
+
+</para>
+
+@address: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_address_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_address_get_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_address_set_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ident: 
+
+
+<!-- ##### FUNCTION idmef_address_new_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_address_get_category ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_address_set_category ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@category: 
+
+
+<!-- ##### FUNCTION idmef_address_new_category ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_address_get_vlan_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_address_set_vlan_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@vlan_name: 
+
+
+<!-- ##### FUNCTION idmef_address_new_vlan_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_address_unset_vlan_num ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_address_get_vlan_num ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_address_set_vlan_num ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@vlan_num: 
+
+
+<!-- ##### FUNCTION idmef_address_new_vlan_num ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_address_get_address ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_address_set_address ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@address: 
+
+
+<!-- ##### FUNCTION idmef_address_new_address ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_address_get_netmask ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_address_set_netmask ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@netmask: 
+
+
+<!-- ##### FUNCTION idmef_address_new_netmask ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_process_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_process_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_process_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_process_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_process_ref ##### -->
+<para>
+
+</para>
+
+@process: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_process_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_process_get_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_process_set_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ident: 
+
+
+<!-- ##### FUNCTION idmef_process_new_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_process_get_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_process_set_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@name: 
+
+
+<!-- ##### FUNCTION idmef_process_new_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_process_unset_pid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_process_get_pid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_process_set_pid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@pid: 
+
+
+<!-- ##### FUNCTION idmef_process_new_pid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_process_get_path ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_process_set_path ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@path: 
+
+
+<!-- ##### FUNCTION idmef_process_new_path ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_process_get_next_arg ##### -->
+<para>
+
+</para>
+
+@process: 
+@requiem_string_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_process_set_arg ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_process_new_arg ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_process_get_next_env ##### -->
+<para>
+
+</para>
+
+@process: 
+@requiem_string_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_process_set_env ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_process_new_env ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_web_service_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_web_service_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_web_service_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_web_service_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_web_service_ref ##### -->
+<para>
+
+</para>
+
+@web_service: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_web_service_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_web_service_get_url ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_web_service_set_url ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@url: 
+
+
+<!-- ##### FUNCTION idmef_web_service_new_url ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_web_service_get_cgi ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_web_service_set_cgi ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@cgi: 
+
+
+<!-- ##### FUNCTION idmef_web_service_new_cgi ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_web_service_get_http_method ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_web_service_set_http_method ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@http_method: 
+
+
+<!-- ##### FUNCTION idmef_web_service_new_http_method ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_web_service_get_next_arg ##### -->
+<para>
+
+</para>
+
+@web_service: 
+@requiem_string_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_web_service_set_arg ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_web_service_new_arg ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_snmp_service_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_snmp_service_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_ref ##### -->
+<para>
+
+</para>
+
+@snmp_service: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_get_oid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_set_oid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@oid: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_new_oid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_unset_message_processing_model ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_get_message_processing_model ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_set_message_processing_model ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@message_processing_model: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_new_message_processing_model ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_unset_security_model ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_get_security_model ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_set_security_model ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@security_model: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_new_security_model ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_get_security_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_set_security_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@security_name: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_new_security_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_unset_security_level ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_get_security_level ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_set_security_level ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@security_level: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_new_security_level ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_get_context_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_set_context_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@context_name: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_new_context_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_get_context_engine_id ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_set_context_engine_id ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@context_engine_id: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_new_context_engine_id ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_get_command ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_set_command ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@command: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_new_command ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_get_community ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_set_community ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@community: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_new_community ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_service_type_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_SERVICE_TYPE_ERROR: 
+@IDMEF_SERVICE_TYPE_DEFAULT: 
+@IDMEF_SERVICE_TYPE_WEB: 
+@IDMEF_SERVICE_TYPE_SNMP: 
+
+<!-- ##### FUNCTION idmef_service_type_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_type_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_service_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_service_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_ref ##### -->
+<para>
+
+</para>
+
+@service: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_service_get_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_set_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ident: 
+
+
+<!-- ##### FUNCTION idmef_service_new_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_unset_ip_version ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_service_get_ip_version ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_set_ip_version ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ip_version: 
+
+
+<!-- ##### FUNCTION idmef_service_new_ip_version ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_unset_iana_protocol_number ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_service_get_iana_protocol_number ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_set_iana_protocol_number ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@iana_protocol_number: 
+
+
+<!-- ##### FUNCTION idmef_service_new_iana_protocol_number ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_get_iana_protocol_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_set_iana_protocol_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@iana_protocol_name: 
+
+
+<!-- ##### FUNCTION idmef_service_new_iana_protocol_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_get_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_set_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@name: 
+
+
+<!-- ##### FUNCTION idmef_service_new_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_unset_port ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_service_get_port ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_set_port ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@port: 
+
+
+<!-- ##### FUNCTION idmef_service_new_port ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_get_portlist ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_set_portlist ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@portlist: 
+
+
+<!-- ##### FUNCTION idmef_service_new_portlist ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_get_protocol ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_set_protocol ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@protocol: 
+
+
+<!-- ##### FUNCTION idmef_service_new_protocol ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_get_type ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_get_web_service ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_set_web_service ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@web_service: 
+
+
+<!-- ##### FUNCTION idmef_service_new_web_service ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_get_snmp_service ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_set_snmp_service ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@snmp_service: 
+
+
+<!-- ##### FUNCTION idmef_service_new_snmp_service ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_node_category_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_NODE_CATEGORY_ERROR: 
+@IDMEF_NODE_CATEGORY_UNKNOWN: 
+@IDMEF_NODE_CATEGORY_ADS: 
+@IDMEF_NODE_CATEGORY_AFS: 
+@IDMEF_NODE_CATEGORY_CODA: 
+@IDMEF_NODE_CATEGORY_DFS: 
+@IDMEF_NODE_CATEGORY_DNS: 
+@IDMEF_NODE_CATEGORY_HOSTS: 
+@IDMEF_NODE_CATEGORY_KERBEROS: 
+@IDMEF_NODE_CATEGORY_NDS: 
+@IDMEF_NODE_CATEGORY_NIS: 
+@IDMEF_NODE_CATEGORY_NISPLUS: 
+@IDMEF_NODE_CATEGORY_NT: 
+@IDMEF_NODE_CATEGORY_WFW: 
+
+<!-- ##### FUNCTION idmef_node_category_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_node_category_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_node_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_node_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_node_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_node_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_node_ref ##### -->
+<para>
+
+</para>
+
+@node: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_node_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_node_get_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_node_set_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ident: 
+
+
+<!-- ##### FUNCTION idmef_node_new_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_node_get_category ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_node_set_category ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@category: 
+
+
+<!-- ##### FUNCTION idmef_node_new_category ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_node_get_location ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_node_set_location ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@location: 
+
+
+<!-- ##### FUNCTION idmef_node_new_location ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_node_get_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_node_set_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@name: 
+
+
+<!-- ##### FUNCTION idmef_node_new_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_node_get_next_address ##### -->
+<para>
+
+</para>
+
+@node: 
+@address_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_node_set_address ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_node_new_address ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_source_spoofed_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_SOURCE_SPOOFED_ERROR: 
+@IDMEF_SOURCE_SPOOFED_UNKNOWN: 
+@IDMEF_SOURCE_SPOOFED_YES: 
+@IDMEF_SOURCE_SPOOFED_NO: 
+
+<!-- ##### FUNCTION idmef_source_spoofed_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_spoofed_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_source_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_source_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_ref ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_source_get_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_set_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ident: 
+
+
+<!-- ##### FUNCTION idmef_source_new_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_get_spoofed ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_set_spoofed ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@spoofed: 
+
+
+<!-- ##### FUNCTION idmef_source_new_spoofed ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_get_interface ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_set_interface ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@interface: 
+
+
+<!-- ##### FUNCTION idmef_source_new_interface ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_get_node ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_set_node ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@node: 
+
+
+<!-- ##### FUNCTION idmef_source_new_node ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_get_user ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_set_user ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@user: 
+
+
+<!-- ##### FUNCTION idmef_source_new_user ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_get_process ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_set_process ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@process: 
+
+
+<!-- ##### FUNCTION idmef_source_new_process ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_get_service ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_set_service ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@service: 
+
+
+<!-- ##### FUNCTION idmef_source_new_service ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_file_access_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_file_access_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_access_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_access_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_access_ref ##### -->
+<para>
+
+</para>
+
+@file_access: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_access_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_file_access_get_user_id ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_access_set_user_id ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@user_id: 
+
+
+<!-- ##### FUNCTION idmef_file_access_new_user_id ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_access_get_next_permission ##### -->
+<para>
+
+</para>
+
+@file_access: 
+@requiem_string_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_access_set_permission ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_file_access_new_permission ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_inode_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_inode_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_inode_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_inode_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_inode_ref ##### -->
+<para>
+
+</para>
+
+@inode: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_inode_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_inode_get_change_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_inode_set_change_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@change_time: 
+
+
+<!-- ##### FUNCTION idmef_inode_new_change_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_inode_unset_number ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_inode_get_number ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_inode_set_number ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@number: 
+
+
+<!-- ##### FUNCTION idmef_inode_new_number ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_inode_unset_major_device ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_inode_get_major_device ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_inode_set_major_device ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@major_device: 
+
+
+<!-- ##### FUNCTION idmef_inode_new_major_device ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_inode_unset_minor_device ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_inode_get_minor_device ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_inode_set_minor_device ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@minor_device: 
+
+
+<!-- ##### FUNCTION idmef_inode_new_minor_device ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_inode_unset_c_major_device ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_inode_get_c_major_device ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_inode_set_c_major_device ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@c_major_device: 
+
+
+<!-- ##### FUNCTION idmef_inode_new_c_major_device ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_inode_unset_c_minor_device ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_inode_get_c_minor_device ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_inode_set_c_minor_device ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@c_minor_device: 
+
+
+<!-- ##### FUNCTION idmef_inode_new_c_minor_device ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_linkage_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ENUM idmef_checksum_algorithm_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_CHECKSUM_ALGORITHM_ERROR: 
+@IDMEF_CHECKSUM_ALGORITHM_MD4: 
+@IDMEF_CHECKSUM_ALGORITHM_MD5: 
+@IDMEF_CHECKSUM_ALGORITHM_SHA1: 
+@IDMEF_CHECKSUM_ALGORITHM_SHA2_256: 
+@IDMEF_CHECKSUM_ALGORITHM_SHA2_384: 
+@IDMEF_CHECKSUM_ALGORITHM_SHA2_512: 
+@IDMEF_CHECKSUM_ALGORITHM_CRC_32: 
+@IDMEF_CHECKSUM_ALGORITHM_HAVAL: 
+@IDMEF_CHECKSUM_ALGORITHM_TIGER: 
+@IDMEF_CHECKSUM_ALGORITHM_GOST: 
+
+<!-- ##### FUNCTION idmef_checksum_algorithm_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_checksum_algorithm_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_checksum_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_checksum_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_checksum_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_checksum_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_checksum_ref ##### -->
+<para>
+
+</para>
+
+@checksum: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_checksum_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_checksum_get_value ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_checksum_set_value ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@value: 
+
+
+<!-- ##### FUNCTION idmef_checksum_new_value ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_checksum_get_key ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_checksum_set_key ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@key: 
+
+
+<!-- ##### FUNCTION idmef_checksum_new_key ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_checksum_get_algorithm ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_checksum_set_algorithm ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@algorithm: 
+
+
+<!-- ##### FUNCTION idmef_checksum_new_algorithm ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_file_category_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_FILE_CATEGORY_ERROR: 
+@IDMEF_FILE_CATEGORY_CURRENT: 
+@IDMEF_FILE_CATEGORY_ORIGINAL: 
+
+<!-- ##### FUNCTION idmef_file_category_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_category_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_file_fstype_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_FILE_FSTYPE_ERROR: 
+@IDMEF_FILE_FSTYPE_UFS: 
+@IDMEF_FILE_FSTYPE_EFS: 
+@IDMEF_FILE_FSTYPE_NFS: 
+@IDMEF_FILE_FSTYPE_AFS: 
+@IDMEF_FILE_FSTYPE_NTFS: 
+@IDMEF_FILE_FSTYPE_FAT16: 
+@IDMEF_FILE_FSTYPE_FAT32: 
+@IDMEF_FILE_FSTYPE_PCFS: 
+@IDMEF_FILE_FSTYPE_JOLIET: 
+@IDMEF_FILE_FSTYPE_ISO9660: 
+
+<!-- ##### FUNCTION idmef_file_fstype_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_fstype_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_file_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_file_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_ref ##### -->
+<para>
+
+</para>
+
+@file: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_file_get_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_set_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ident: 
+
+
+<!-- ##### FUNCTION idmef_file_new_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_get_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_set_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@name: 
+
+
+<!-- ##### FUNCTION idmef_file_new_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_get_path ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_set_path ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@path: 
+
+
+<!-- ##### FUNCTION idmef_file_new_path ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_get_create_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_set_create_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@create_time: 
+
+
+<!-- ##### FUNCTION idmef_file_new_create_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_get_modify_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_set_modify_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@modify_time: 
+
+
+<!-- ##### FUNCTION idmef_file_new_modify_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_get_access_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_set_access_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@access_time: 
+
+
+<!-- ##### FUNCTION idmef_file_new_access_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_unset_data_size ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_file_get_data_size ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_set_data_size ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@data_size: 
+
+
+<!-- ##### FUNCTION idmef_file_new_data_size ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_unset_disk_size ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_file_get_disk_size ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_set_disk_size ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@disk_size: 
+
+
+<!-- ##### FUNCTION idmef_file_new_disk_size ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_get_next_file_access ##### -->
+<para>
+
+</para>
+
+@file: 
+@file_access_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_set_file_access ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_file_new_file_access ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_get_next_linkage ##### -->
+<para>
+
+</para>
+
+@file: 
+@linkage_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_set_linkage ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_file_new_linkage ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_get_inode ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_set_inode ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@inode: 
+
+
+<!-- ##### FUNCTION idmef_file_new_inode ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_get_next_checksum ##### -->
+<para>
+
+</para>
+
+@file: 
+@checksum_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_set_checksum ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_file_new_checksum ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_get_category ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_set_category ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@category: 
+
+
+<!-- ##### FUNCTION idmef_file_new_category ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_unset_fstype ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_file_get_fstype ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_set_fstype ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@fstype: 
+
+
+<!-- ##### FUNCTION idmef_file_new_fstype ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_get_file_type ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_set_file_type ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@file_type: 
+
+
+<!-- ##### FUNCTION idmef_file_new_file_type ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_linkage_category_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_LINKAGE_CATEGORY_ERROR: 
+@IDMEF_LINKAGE_CATEGORY_HARD_LINK: 
+@IDMEF_LINKAGE_CATEGORY_MOUNT_POINT: 
+@IDMEF_LINKAGE_CATEGORY_REPARSE_POINT: 
+@IDMEF_LINKAGE_CATEGORY_SHORTCUT: 
+@IDMEF_LINKAGE_CATEGORY_STREAM: 
+@IDMEF_LINKAGE_CATEGORY_SYMBOLIC_LINK: 
+
+<!-- ##### FUNCTION idmef_linkage_category_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_linkage_category_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_linkage_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_linkage_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_linkage_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_linkage_ref ##### -->
+<para>
+
+</para>
+
+@linkage: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_linkage_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_linkage_get_category ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_linkage_set_category ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@category: 
+
+
+<!-- ##### FUNCTION idmef_linkage_new_category ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_linkage_get_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_linkage_set_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@name: 
+
+
+<!-- ##### FUNCTION idmef_linkage_new_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_linkage_get_path ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_linkage_set_path ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@path: 
+
+
+<!-- ##### FUNCTION idmef_linkage_new_path ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_linkage_get_file ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_linkage_set_file ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@file: 
+
+
+<!-- ##### FUNCTION idmef_linkage_new_file ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_target_decoy_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_TARGET_DECOY_ERROR: 
+@IDMEF_TARGET_DECOY_UNKNOWN: 
+@IDMEF_TARGET_DECOY_YES: 
+@IDMEF_TARGET_DECOY_NO: 
+
+<!-- ##### FUNCTION idmef_target_decoy_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_decoy_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_target_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_target_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_ref ##### -->
+<para>
+
+</para>
+
+@target: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_target_get_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_set_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ident: 
+
+
+<!-- ##### FUNCTION idmef_target_new_ident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_get_decoy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_set_decoy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@decoy: 
+
+
+<!-- ##### FUNCTION idmef_target_new_decoy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_get_interface ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_set_interface ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@interface: 
+
+
+<!-- ##### FUNCTION idmef_target_new_interface ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_get_node ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_set_node ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@node: 
+
+
+<!-- ##### FUNCTION idmef_target_new_node ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_get_user ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_set_user ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@user: 
+
+
+<!-- ##### FUNCTION idmef_target_new_user ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_get_process ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_set_process ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@process: 
+
+
+<!-- ##### FUNCTION idmef_target_new_process ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_get_service ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_set_service ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@service: 
+
+
+<!-- ##### FUNCTION idmef_target_new_service ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_get_next_file ##### -->
+<para>
+
+</para>
+
+@target: 
+@file_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_set_file ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_target_new_file ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_analyzer_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_analyzer_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_ref ##### -->
+<para>
+
+</para>
+
+@analyzer: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_get_analyzerid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_set_analyzerid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@analyzerid: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_new_analyzerid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_get_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_set_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@name: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_new_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_get_manufacturer ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_set_manufacturer ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@manufacturer: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_new_manufacturer ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_get_model ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_set_model ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@model: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_new_model ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_get_version ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_set_version ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@version: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_new_version ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_get_class ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_set_class ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@class_str: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_new_class ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_get_ostype ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_set_ostype ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ostype: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_new_ostype ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_get_osversion ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_set_osversion ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@osversion: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_new_osversion ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_get_node ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_set_node ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@node: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_new_node ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_get_process ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_set_process ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@process: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_new_process ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_alertident_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_alertident_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alertident_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alertident_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alertident_ref ##### -->
+<para>
+
+</para>
+
+@alertident: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alertident_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_alertident_get_alertident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alertident_set_alertident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@alertident: 
+
+
+<!-- ##### FUNCTION idmef_alertident_new_alertident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alertident_get_analyzerid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alertident_set_analyzerid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@analyzerid: 
+
+
+<!-- ##### FUNCTION idmef_alertident_new_analyzerid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_impact_severity_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_IMPACT_SEVERITY_ERROR: 
+@IDMEF_IMPACT_SEVERITY_INFO: 
+@IDMEF_IMPACT_SEVERITY_LOW: 
+@IDMEF_IMPACT_SEVERITY_MEDIUM: 
+@IDMEF_IMPACT_SEVERITY_HIGH: 
+
+<!-- ##### FUNCTION idmef_impact_severity_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_impact_severity_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_impact_completion_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_IMPACT_COMPLETION_ERROR: 
+@IDMEF_IMPACT_COMPLETION_FAILED: 
+@IDMEF_IMPACT_COMPLETION_SUCCEEDED: 
+
+<!-- ##### FUNCTION idmef_impact_completion_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_impact_completion_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_impact_type_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_IMPACT_TYPE_ERROR: 
+@IDMEF_IMPACT_TYPE_OTHER: 
+@IDMEF_IMPACT_TYPE_ADMIN: 
+@IDMEF_IMPACT_TYPE_DOS: 
+@IDMEF_IMPACT_TYPE_FILE: 
+@IDMEF_IMPACT_TYPE_RECON: 
+@IDMEF_IMPACT_TYPE_USER: 
+
+<!-- ##### FUNCTION idmef_impact_type_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_impact_type_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_impact_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_impact_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_impact_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_impact_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_impact_ref ##### -->
+<para>
+
+</para>
+
+@impact: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_impact_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_impact_unset_severity ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_impact_get_severity ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_impact_set_severity ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@severity: 
+
+
+<!-- ##### FUNCTION idmef_impact_new_severity ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_impact_unset_completion ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_impact_get_completion ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_impact_set_completion ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@completion: 
+
+
+<!-- ##### FUNCTION idmef_impact_new_completion ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_impact_get_type ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_impact_set_type ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@type: 
+
+
+<!-- ##### FUNCTION idmef_impact_new_type ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_impact_get_description ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_impact_set_description ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@description: 
+
+
+<!-- ##### FUNCTION idmef_impact_new_description ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_action_category_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_ACTION_CATEGORY_ERROR: 
+@IDMEF_ACTION_CATEGORY_OTHER: 
+@IDMEF_ACTION_CATEGORY_BLOCK_INSTALLED: 
+@IDMEF_ACTION_CATEGORY_NOTIFICATION_SENT: 
+@IDMEF_ACTION_CATEGORY_TAKEN_OFFLINE: 
+
+<!-- ##### FUNCTION idmef_action_category_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_action_category_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_action_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_action_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_action_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_action_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_action_ref ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_action_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_action_get_category ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_action_set_category ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@category: 
+
+
+<!-- ##### FUNCTION idmef_action_new_category ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_action_get_description ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_action_set_description ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@description: 
+
+
+<!-- ##### FUNCTION idmef_action_new_description ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_confidence_rating_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_CONFIDENCE_RATING_ERROR: 
+@IDMEF_CONFIDENCE_RATING_NUMERIC: 
+@IDMEF_CONFIDENCE_RATING_LOW: 
+@IDMEF_CONFIDENCE_RATING_MEDIUM: 
+@IDMEF_CONFIDENCE_RATING_HIGH: 
+
+<!-- ##### FUNCTION idmef_confidence_rating_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_confidence_rating_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_confidence_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_confidence_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_confidence_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_confidence_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_confidence_ref ##### -->
+<para>
+
+</para>
+
+@confidence: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_confidence_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_confidence_get_rating ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_confidence_set_rating ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@rating: 
+
+
+<!-- ##### FUNCTION idmef_confidence_new_rating ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_confidence_get_confidence ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_confidence_set_confidence ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@confidence: 
+
+
+<!-- ##### FUNCTION idmef_confidence_new_confidence ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_assessment_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_assessment_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_assessment_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_assessment_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_assessment_ref ##### -->
+<para>
+
+</para>
+
+@assessment: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_assessment_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_assessment_get_impact ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_assessment_set_impact ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@impact: 
+
+
+<!-- ##### FUNCTION idmef_assessment_new_impact ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_assessment_get_next_action ##### -->
+<para>
+
+</para>
+
+@assessment: 
+@action_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_assessment_set_action ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_assessment_new_action ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_assessment_get_confidence ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_assessment_set_confidence ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@confidence: 
+
+
+<!-- ##### FUNCTION idmef_assessment_new_confidence ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_tool_alert_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_tool_alert_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_tool_alert_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_tool_alert_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_tool_alert_ref ##### -->
+<para>
+
+</para>
+
+@tool_alert: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_tool_alert_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_tool_alert_get_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_tool_alert_set_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@name: 
+
+
+<!-- ##### FUNCTION idmef_tool_alert_new_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_tool_alert_get_command ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_tool_alert_set_command ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@command: 
+
+
+<!-- ##### FUNCTION idmef_tool_alert_new_command ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_tool_alert_get_next_alertident ##### -->
+<para>
+
+</para>
+
+@tool_alert: 
+@alertident_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_tool_alert_set_alertident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_tool_alert_new_alertident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_correlation_alert_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_correlation_alert_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_correlation_alert_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_correlation_alert_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_correlation_alert_ref ##### -->
+<para>
+
+</para>
+
+@correlation_alert: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_correlation_alert_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_correlation_alert_get_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_correlation_alert_set_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@name: 
+
+
+<!-- ##### FUNCTION idmef_correlation_alert_new_name ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_correlation_alert_get_next_alertident ##### -->
+<para>
+
+</para>
+
+@correlation_alert: 
+@alertident_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_correlation_alert_set_alertident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_correlation_alert_new_alertident ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_overflow_alert_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_overflow_alert_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_overflow_alert_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_overflow_alert_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_overflow_alert_ref ##### -->
+<para>
+
+</para>
+
+@overflow_alert: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_overflow_alert_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_overflow_alert_get_program ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_overflow_alert_set_program ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@program: 
+
+
+<!-- ##### FUNCTION idmef_overflow_alert_new_program ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_overflow_alert_unset_size ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_overflow_alert_get_size ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_overflow_alert_set_size ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@size: 
+
+
+<!-- ##### FUNCTION idmef_overflow_alert_new_size ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_overflow_alert_get_buffer ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_overflow_alert_set_buffer ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@buffer: 
+
+
+<!-- ##### FUNCTION idmef_overflow_alert_new_buffer ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_alert_type_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_ALERT_TYPE_ERROR: 
+@IDMEF_ALERT_TYPE_DEFAULT: 
+@IDMEF_ALERT_TYPE_TOOL: 
+@IDMEF_ALERT_TYPE_CORRELATION: 
+@IDMEF_ALERT_TYPE_OVERFLOW: 
+
+<!-- ##### FUNCTION idmef_alert_type_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_type_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_alert_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_alert_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_ref ##### -->
+<para>
+
+</para>
+
+@alert: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_alert_get_messageid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_set_messageid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@messageid: 
+
+
+<!-- ##### FUNCTION idmef_alert_new_messageid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_get_next_analyzer ##### -->
+<para>
+
+</para>
+
+@alert: 
+@analyzer_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_set_analyzer ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_alert_new_analyzer ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_get_create_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_set_create_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@create_time: 
+
+
+<!-- ##### FUNCTION idmef_alert_new_create_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_get_classification ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_set_classification ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@classification: 
+
+
+<!-- ##### FUNCTION idmef_alert_new_classification ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_get_detect_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_set_detect_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@detect_time: 
+
+
+<!-- ##### FUNCTION idmef_alert_new_detect_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_get_analyzer_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_set_analyzer_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@analyzer_time: 
+
+
+<!-- ##### FUNCTION idmef_alert_new_analyzer_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_get_next_source ##### -->
+<para>
+
+</para>
+
+@alert: 
+@source_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_set_source ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_alert_new_source ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_get_next_target ##### -->
+<para>
+
+</para>
+
+@alert: 
+@target_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_set_target ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_alert_new_target ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_get_assessment ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_set_assessment ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@assessment: 
+
+
+<!-- ##### FUNCTION idmef_alert_new_assessment ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_get_next_additional_data ##### -->
+<para>
+
+</para>
+
+@alert: 
+@additional_data_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_set_additional_data ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_alert_new_additional_data ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_get_type ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_get_tool_alert ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_set_tool_alert ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@tool_alert: 
+
+
+<!-- ##### FUNCTION idmef_alert_new_tool_alert ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_get_correlation_alert ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_set_correlation_alert ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@correlation_alert: 
+
+
+<!-- ##### FUNCTION idmef_alert_new_correlation_alert ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_get_overflow_alert ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_set_overflow_alert ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@overflow_alert: 
+
+
+<!-- ##### FUNCTION idmef_alert_new_overflow_alert ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_heartbeat_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_heartbeat_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_ref ##### -->
+<para>
+
+</para>
+
+@heartbeat: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_get_messageid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_set_messageid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@messageid: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_new_messageid ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_get_next_analyzer ##### -->
+<para>
+
+</para>
+
+@heartbeat: 
+@analyzer_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_set_analyzer ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_new_analyzer ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_get_create_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_set_create_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@create_time: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_new_create_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_get_analyzer_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_set_analyzer_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@analyzer_time: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_new_analyzer_time ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_unset_heartbeat_interval ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_get_heartbeat_interval ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_set_heartbeat_interval ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@heartbeat_interval: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_new_heartbeat_interval ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_get_next_additional_data ##### -->
+<para>
+
+</para>
+
+@heartbeat: 
+@additional_data_cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_set_additional_data ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@object: 
+@pos: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_new_additional_data ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@pos: 
+@Returns: 
+
+
+<!-- ##### ENUM idmef_message_type_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_MESSAGE_TYPE_ERROR: 
+@IDMEF_MESSAGE_TYPE_ALERT: 
+@IDMEF_MESSAGE_TYPE_HEARTBEAT: 
+
+<!-- ##### FUNCTION idmef_message_type_to_numeric ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_type_to_string ##### -->
+<para>
+
+</para>
+
+@val: 
+@Returns: 
+
+
+<!-- ##### TYPEDEF idmef_message_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION idmef_message_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_ref ##### -->
+<para>
+
+</para>
+
+@message: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_destroy ##### -->
+<para>
+
+</para>
+
+@ptr: 
+
+
+<!-- ##### FUNCTION idmef_message_get_version ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_set_version ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@version: 
+
+
+<!-- ##### FUNCTION idmef_message_new_version ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_get_type ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_get_alert ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_set_alert ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@alert: 
+
+
+<!-- ##### FUNCTION idmef_message_new_alert ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_get_heartbeat ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_set_heartbeat ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@heartbeat: 
+
+
+<!-- ##### FUNCTION idmef_message_new_heartbeat ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_set_pmsg ##### -->
+<para>
+
+</para>
+
+@message: 
+@msg: 
+
+
+<!-- ##### FUNCTION idmef_message_get_pmsg ##### -->
+<para>
+
+</para>
+
+@message: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_action_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_address_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alertident_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_assessment_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_checksum_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_classification_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_confidence_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_correlation_alert_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_compare ##### -->
+<para>
+
+</para>
+
+@data1: 
+@data2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_access_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_impact_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_inode_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_linkage_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_node_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_overflow_alert_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_process_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_reference_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_time_compare ##### -->
+<para>
+
+</para>
+
+@time1: 
+@time2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_tool_alert_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_id_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_web_service_compare ##### -->
+<para>
+
+</para>
+
+@obj1: 
+@obj2: 
+@Returns: 
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_ADDITIONAL_DATA_TYPE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_ADDITIONAL_DATA ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_REFERENCE_ORIGIN ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_REFERENCE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_CLASSIFICATION ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_USER_ID_TYPE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_USER_ID ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_USER_CATEGORY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_USER ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_ADDRESS_CATEGORY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_ADDRESS ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_PROCESS ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_WEB_SERVICE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_SNMP_SERVICE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_SERVICE_TYPE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_SERVICE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_NODE_CATEGORY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_NODE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_SOURCE_SPOOFED ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_SOURCE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_FILE_ACCESS ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_INODE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_CHECKSUM_ALGORITHM ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_CHECKSUM ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_FILE_CATEGORY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_FILE_FSTYPE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_FILE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_LINKAGE_CATEGORY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_LINKAGE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_TARGET_DECOY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_TARGET ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_ANALYZER ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_ALERTIDENT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_IMPACT_SEVERITY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_IMPACT_COMPLETION ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_IMPACT_TYPE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_IMPACT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_ACTION_CATEGORY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_ACTION ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_CONFIDENCE_RATING ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_CONFIDENCE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_ASSESSMENT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_TOOL_ALERT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_CORRELATION_ALERT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_OVERFLOW_ALERT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_ALERT_TYPE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_ALERT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_HEARTBEAT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_MESSAGE_TYPE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO IDMEF_CLASS_ID_MESSAGE ##### -->
+<para>
+
+</para>
+
+
+

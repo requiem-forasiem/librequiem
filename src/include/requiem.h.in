@@ -1,0 +1,75 @@
+/*****
+*
+* Copyright (C) 2004, 2005 PreludeIDS Technologies. All Rights Reserved.
+* Author: Yoann Vandoorselaere <yoannv@gmail.com>
+*
+* This file is part of the Requiem library.
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2, or (at your option)
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; see the file COPYING.  If not, write to
+* the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+*
+*****/
+
+#ifndef _LIBREQUIEM_REQUIEM_H
+#define _LIBREQUIEM_REQUIEM_H
+
+/*
+ * LIBREQUIEM_VERSION:
+ * Version of librequiem this header come from.
+ *
+ * This is mostly used by the librequiem detection routine in librequiem.m4
+ * to make sure that the header version is consistant with the linked library.
+ */
+#define LIBREQUIEM_VERSION "@VERSION@"
+
+#include "requiem-inttypes.h"
+#include "common.h"
+#include "requiem-client.h"
+#include "requiem-connection.h"
+#include "requiem-connection-pool.h"
+#include "requiem-error.h"
+#include "requiem-io.h"
+#include "requiem-option.h"
+#include "requiem-async.h"
+#include "requiem-error.h"
+#include "requiem-plugin.h"
+#include "requiem-msg.h"
+#include "requiem-msgbuf.h"
+#include "requiem-timer.h"
+#include "idmef.h"
+
+#ifdef __cplusplus
+ extern "C" {
+#endif
+
+int requiem_init(int *argc, char **argv);
+
+void requiem_deinit(void);
+
+const char *requiem_check_version(const char *req_version);
+
+int requiem_thread_init(void *future_use);
+
+void requiem_fork_prepare(void);
+
+void requiem_fork_parent(void);
+
+void requiem_fork_child(void);
+
+
+#ifdef __cplusplus
+ }
+#endif
+
+#endif /* _LIBREQUIEM_REQUIEM_H */

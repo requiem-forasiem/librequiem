@@ -1,0 +1,45 @@
+use Config;
+use ExtUtils::MakeMaker;
+use ExtUtils::MM_Unix;
+use File::Copy;
+use Cwd "abs_path";
+
+my %attributs = (NAME => 'RequiemEasy',
+		 INC => '-I@top_srcdir@ -I@top_builddir@/src/include -I@top_srcdir@/src/include -I@top_builddir@/src/librequiem-error -I@top_srcdir@/bindings/c++/include -I@top_srcdir@/libmissing -I@top_builddir@/libmissing',
+		 LIBS => ["-L@top_builddir@/src/.libs -lrequiem -L@top_builddir@/bindings/c++/.libs -lrequiemcpp", "-L$ENV{LIBDIR} -lrequiem @LIBREQUIEM_LIBS@ @LIBADD_DL@ @LTLIBTHREAD@" ],
+		 LDDLFLAGS => "-L@top_builddir@/src/.libs $Config{lddlflags}");
+
+if ( abs_path("@top_srcdir@") ne abs_path("@top_builddir@") ) {
+    foreach my $filename ( qw/easy-idmef_wrap_perl.cxx RequiemEasy.pm/ ) {
+	my $src = "@top_srcdir@/bindings/perl/$filename";
+	my $dst = "@top_builddir@/bindings/perl/$filename";
+	copy($src, $dst) if ( ! -e $dst );
+    }
+    $attributs{"clean"} = {FILES => join(" ", map { "@top_builddir@/bindings/perl/$_" } qw/easy-idmef_wrap_perl.cxx RequiemEasy.pm Makefile/)};
+}
+
+if ( -w $Config{"sitelib"} ) {
+    $attributs{"INSTALLDIRS"} = "site";
+} else {
+    $attributs{"PREFIX"} = "@prefix@";
+}
+
+WriteMakefile(%attributs);
+
+my($atime, $mtime) = (stat "Makefile.PL")[8,9];
+utime($atime + 1, $mtime + 1, "Makefile");
+
+
+package MY;
+
+sub install
+{
+    my $str = shift->SUPER::install(@_);
+    my @files = ((map { "\$(INSTALLSITEARCH)/$_" } qw/perllocal.pod RequiemEasy.pm/),
+                 (map { "\$(INSTALLSITEARCH)/auto/RequiemEasy/$_" } qw/RequiemEasy.bs RequiemEasy.so .packlist/),
+                 '$(INSTALLMAN3DIR)/Requiem.$(MAN3EXT)');
+
+    $str =~ s/(uninstall_from_sitedirs.+)\n.+\n/"$1\n\t\$(RM_F) " . join(" ", @files) . "\n"/e;
+
+    return $str;
+}

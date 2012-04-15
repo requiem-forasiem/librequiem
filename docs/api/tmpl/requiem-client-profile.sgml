@@ -1,0 +1,277 @@
+<!-- ##### SECTION Title ##### -->
+requiem-client-profile
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### TYPEDEF requiem_gid_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### TYPEDEF requiem_uid_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### TYPEDEF requiem_client_profile_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION requiem_client_profile_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_ref ##### -->
+<para>
+
+</para>
+
+@cp: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_destroy ##### -->
+<para>
+
+</para>
+
+@cp: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_get_config_filename ##### -->
+<para>
+
+</para>
+
+@cp: 
+@buf: 
+@size: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_get_analyzerid_filename ##### -->
+<para>
+
+</para>
+
+@cp: 
+@buf: 
+@size: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_get_tls_key_filename ##### -->
+<para>
+
+</para>
+
+@cp: 
+@buf: 
+@size: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_get_tls_server_ca_cert_filename ##### -->
+<para>
+
+</para>
+
+@cp: 
+@buf: 
+@size: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_get_tls_server_keycert_filename ##### -->
+<para>
+
+</para>
+
+@cp: 
+@buf: 
+@size: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_get_tls_server_crl_filename ##### -->
+<para>
+
+</para>
+
+@cp: 
+@buf: 
+@size: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_get_tls_client_keycert_filename ##### -->
+<para>
+
+</para>
+
+@cp: 
+@buf: 
+@size: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_get_tls_client_trusted_cert_filename ##### -->
+<para>
+
+</para>
+
+@cp: 
+@buf: 
+@size: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_get_backup_dirname ##### -->
+<para>
+
+</para>
+
+@cp: 
+@buf: 
+@size: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_get_profile_dirname ##### -->
+<para>
+
+</para>
+
+@cp: 
+@buf: 
+@size: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_get_default_config_dirname ##### -->
+<para>
+
+</para>
+
+@cp: 
+@buf: 
+@size: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_set_prefix ##### -->
+<para>
+
+</para>
+
+@cp: 
+@prefix: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_get_prefix ##### -->
+<para>
+
+</para>
+
+@cp: 
+@buf: 
+@size: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_set_uid ##### -->
+<para>
+
+</para>
+
+@cp: 
+@uid: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_get_uid ##### -->
+<para>
+
+</para>
+
+@cp: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_set_gid ##### -->
+<para>
+
+</para>
+
+@cp: 
+@gid: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_get_gid ##### -->
+<para>
+
+</para>
+
+@cp: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_set_name ##### -->
+<para>
+
+</para>
+
+@cp: 
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_get_name ##### -->
+<para>
+
+</para>
+
+@cp: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_get_analyzerid ##### -->
+<para>
+
+</para>
+
+@cp: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_set_analyzerid ##### -->
+<para>
+
+</para>
+
+@cp: 
+@analyzerid: 
+
+
+<!-- ##### FUNCTION requiem_client_profile_get_credentials ##### -->
+<para>
+
+</para>
+
+@cp: 
+@credentials: 
+@Returns: 
+
+

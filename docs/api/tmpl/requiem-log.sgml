@@ -1,0 +1,142 @@
+<!-- ##### SECTION Title ##### -->
+requiem-log
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### ENUM requiem_log_t ##### -->
+<para>
+
+</para>
+
+@REQUIEM_LOG_CRIT: 
+@REQUIEM_LOG_ERR: 
+@REQUIEM_LOG_WARN: 
+@REQUIEM_LOG_INFO: 
+@REQUIEM_LOG_DEBUG: 
+
+<!-- ##### ENUM requiem_log_flags_t ##### -->
+<para>
+
+</para>
+
+@REQUIEM_LOG_FLAGS_QUIET: 
+@REQUIEM_LOG_FLAGS_SYSLOG: 
+
+<!-- ##### FUNCTION requiem_log ##### -->
+<para>
+
+</para>
+
+@level: 
+@fmt: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION requiem_log_debug ##### -->
+<para>
+
+</para>
+
+@level: 
+@fmt: 
+@Varargs: 
+
+
+<!-- ##### MACRO requiem_log_v ##### -->
+<para>
+
+</para>
+
+@level: 
+@fmt: 
+@ap: 
+
+
+<!-- ##### MACRO requiem_log_debug_v ##### -->
+<para>
+
+</para>
+
+@level: 
+@fmt: 
+@ap: 
+
+
+<!-- ##### FUNCTION requiem_log_set_level ##### -->
+<para>
+
+</para>
+
+@level: 
+
+
+<!-- ##### FUNCTION requiem_log_set_debug_level ##### -->
+<para>
+
+</para>
+
+@level: 
+
+
+<!-- ##### FUNCTION requiem_log_get_flags ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_log_set_flags ##### -->
+<para>
+
+</para>
+
+@flags: 
+
+
+<!-- ##### FUNCTION requiem_log_get_prefix ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_log_set_prefix ##### -->
+<para>
+
+</para>
+
+@prefix: 
+
+
+<!-- ##### FUNCTION requiem_log_set_callback ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION requiem_log_set_logfile ##### -->
+<para>
+
+</para>
+
+@filename: 
+@Returns: 
+
+

@@ -1,0 +1,342 @@
+<!-- ##### SECTION Title ##### -->
+idmef-message-write
+
+<!-- ##### SECTION Short_Description ##### -->
+
+Writing IDMEF class to a message buffer
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+If you're not willing to use the requiem_client_send_idmef() function, because for
+example you want more control over how a message is sent, you can use the idmef-message-write
+API to send your message manually.
+</para>
+
+<para>
+The functions defined in this API all take an IDMEF object as an argument and
+dump this object in a format suitable for writing it to a socket or a file 
+(covering, for example, convertion from host byte order to network byte order), 
+to the provided #requiem_msgbuf_t buffer.
+</para>
+
+<para>
+The #requiem_msgbuf_t object is just a buffer holding a #requiem_msg_t object. When
+the buffer is full, the user defined function for #requiem_msgbuf_t will be called,
+and the user can write his message using the requiem_msg_write() function.
+</para>
+
+<para>
+<programlisting>
+idmef_message_write(message, msgbuf);
+</programlisting>
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+#requiem_msgbuf_t
+#requiem_msg_t
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### FUNCTION idmef_additional_data_write ##### -->
+<para>
+
+</para>
+
+@additional_data: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_reference_write ##### -->
+<para>
+
+</para>
+
+@reference: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_classification_write ##### -->
+<para>
+
+</para>
+
+@classification: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_id_write ##### -->
+<para>
+
+</para>
+
+@user_id: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_user_write ##### -->
+<para>
+
+</para>
+
+@user: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_address_write ##### -->
+<para>
+
+</para>
+
+@address: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_process_write ##### -->
+<para>
+
+</para>
+
+@process: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_web_service_write ##### -->
+<para>
+
+</para>
+
+@web_service: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_snmp_service_write ##### -->
+<para>
+
+</para>
+
+@snmp_service: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_service_write ##### -->
+<para>
+
+</para>
+
+@service: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_node_write ##### -->
+<para>
+
+</para>
+
+@node: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_source_write ##### -->
+<para>
+
+</para>
+
+@source: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_access_write ##### -->
+<para>
+
+</para>
+
+@file_access: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_inode_write ##### -->
+<para>
+
+</para>
+
+@inode: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_checksum_write ##### -->
+<para>
+
+</para>
+
+@checksum: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_file_write ##### -->
+<para>
+
+</para>
+
+@file: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_linkage_write ##### -->
+<para>
+
+</para>
+
+@linkage: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_target_write ##### -->
+<para>
+
+</para>
+
+@target: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_analyzer_write ##### -->
+<para>
+
+</para>
+
+@analyzer: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alertident_write ##### -->
+<para>
+
+</para>
+
+@alertident: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_impact_write ##### -->
+<para>
+
+</para>
+
+@impact: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_action_write ##### -->
+<para>
+
+</para>
+
+@action: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_confidence_write ##### -->
+<para>
+
+</para>
+
+@confidence: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_assessment_write ##### -->
+<para>
+
+</para>
+
+@assessment: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_tool_alert_write ##### -->
+<para>
+
+</para>
+
+@tool_alert: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_correlation_alert_write ##### -->
+<para>
+
+</para>
+
+@correlation_alert: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_overflow_alert_write ##### -->
+<para>
+
+</para>
+
+@overflow_alert: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_alert_write ##### -->
+<para>
+
+</para>
+
+@alert: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_heartbeat_write ##### -->
+<para>
+
+</para>
+
+@heartbeat: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_message_write ##### -->
+<para>
+
+</para>
+
+@message: 
+@msg: 
+@Returns: 
+
+

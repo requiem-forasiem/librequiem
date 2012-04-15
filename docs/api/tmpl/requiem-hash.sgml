@@ -1,0 +1,100 @@
+<!-- ##### SECTION Title ##### -->
+requiem-hash
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### TYPEDEF requiem_hash_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION requiem_hash_new ##### -->
+<para>
+
+</para>
+
+@hash: 
+@hash_func: 
+@key_cmp_func: 
+@key_destroy_func: 
+@value_destroy_func: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_hash_new2 ##### -->
+<para>
+
+</para>
+
+@hash: 
+@size: 
+@hash_func: 
+@key_cmp_func: 
+@key_destroy_func: 
+@value_destroy_func: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_hash_destroy ##### -->
+<para>
+
+</para>
+
+@hash: 
+
+
+<!-- ##### FUNCTION requiem_hash_set ##### -->
+<para>
+
+</para>
+
+@hash: 
+@key: 
+@value: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_hash_get ##### -->
+<para>
+
+</para>
+
+@hash: 
+@key: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_hash_elem_destroy ##### -->
+<para>
+
+</para>
+
+@hash: 
+@key: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_hash_iterate ##### -->
+<para>
+
+</para>
+
+@hash: 
+@cb: 
+
+

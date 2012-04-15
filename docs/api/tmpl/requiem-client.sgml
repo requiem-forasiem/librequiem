@@ -1,0 +1,426 @@
+<!-- ##### SECTION Title ##### -->
+requiem-client
+
+<!-- ##### SECTION Short_Description ##### -->
+
+Creating a Requiem Client
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+In order to send or to read data from a Requiem collector (requiem-manager),
+you will need to create a #requiem_client_t object. This object will be necessary 
+for most of the work you are going to do with requiem.
+</para>
+
+
+<title>Creating the client</title>
+<para>
+
+<programlisting>
+int ret;
+requiem_client_t *client;
+        
+ret = requiem_client_new(&amp;client, "my-analyzer");
+if ( ! client ) {
+        requiem_perror(ret, "Unable to create a requiem client object");
+        return -1;
+}
+</programlisting>
+
+This will create a new client object, whose default profile is my-analyzer.
+This default profile might be overriden using the --requiem --profile profile_name option on your
+command line as parsed by requiem_init().
+</para>
+
+<para>
+Additionally, requiem specific option might be overriden using a Requiem specific configuration file,
+like the template file created within each profile, or a configuration file specified using
+requiem_client_set_config_filename() before requiem_client_start() is called.
+</para>
+
+<para>
+The default required permission for the created client are set to REQUIEM_CONNECTION_PERMISSION_IDMEF_WRITE
+and REQUIEM_CONNECTION_PERMISSION_ADMIN_READ, which mean the client will reject any certificate where 
+permission are set to anything less than this. You can change the default required permission using the 
+requiem_client_set_required_permission() function.
+</para>
+
+<para>
+As an example, if you want to create a client that will read alert from a Manager, and accept administrative
+option request you should use:
+
+<programlisting>
+requiem_client_set_required_permission(client, REQUIEM_CONNECTION_PERMISSION_IDMEF_READ|REQUIEM_CONNECTION_PERMISSION_ADMIN_WRITE);
+</programlisting>
+</para>
+
+<para>
+Once the client is created and you have everything setup, you will need to start your client. 
+The requiem_client_start() function is responsible for this, and will trigger the connection to 
+the configured manager, and send the initial client heartbeat.
+</para>
+
+<programlisting>
+ret = requiem_client_start(client);
+if ( ret &lt; 0 ) {
+       requiem_log(ret, "Unable to start requiem client");
+       return -1;
+}
+</programlisting>
+
+<para>
+Additionally, it is possible to set additional client flags, however, you should be careful 
+since some of theses flags (marked asynchronous) will result in creating an internal thread, 
+which should only be done after an eventual fork of the program since threads are not copied 
+accross a fork call.
+</para>
+
+<para>
+The requiem library will also register an internal timer in order to send heartbeat message at 
+the defined interval. Timer registered by the library itself or by the program will either be called 
+automatically if the #REQUIEM_CLIENT_FLAGS_ASYNC_TIMER flags is set, otherwise, the program is responsible 
+for calling the requiem_timer_wake_up() function every second from it's main loop, in order to check the 
+registered timer.
+
+<itemizedlist>
+    <listitem>#REQUIEM_CLIENT_FLAGS_CONNECT - Used for a client to connect to a manager (this is the default).</listitem> 
+    <listitem>#REQUIEM_CLIENT_FLAGS_HEARTBEAT - Used for client to send heartbeat (this is the default).</listitem>
+    <listitem>#REQUIEM_CLIENT_FLAGS_ASYNC_SEND - Used if you want message to be sent asynchronously.</listitem>
+    <listitem>#REQUIEM_CLIENT_FLAGS_ASYNC_TIMER - Used if you want timer to be automatically called from the asynchronous thread.</listitem>
+    <listitem>See #requiem_client_flags_t for a list of available flags.</listitem> 
+</itemizedlist>
+
+<programlisting>
+ret = requiem_client_set_flags(client, REQUIEM_CLIENT_FLAGS_ASYNC_SEND|REQUIEM_CLIENT_FLAGS_ASYNC_TIMER);
+if ( ret &lt; 0 ) {
+       fprintf(stderr, "Unable to set asynchronous send and timer.\n");
+       return -1;
+}
+</programlisting>
+
+</para>
+
+<title>Sending IDMEF message</title>
+
+<para>
+For documentation on how to create IDMEF message, please see #idmef_message_t
+or #idmef_path_t.
+</para>
+
+<para>
+Once you created and IDMEF message, you should use the requiem_client_send_idmef() function
+in order to send it to the collector you are connected to. 
+
+<informalexample><programlisting>
+requiem_client_send_idmef(client, idmef);
+</programlisting></informalexample>
+</para>
+
+
+<title>Destroying the client</title>
+
+<para>
+In case the analyzer you are developing is not a persistant analyzer (meaning an 
+analyzer that is not supposed to exit), it is important that you call the requiem_client_destroy() 
+function prior to exiting. This function have the side effect of sending an heartbeat to the remote 
+manager, as well as an information regarding the analyzer state.
+</para>
+
+<para>
+This state information is important since an analyzer not reporting a successful exit status, 
+or an analyzer which stop sending heartbeat at all will be reported as having a problem.
+
+<itemizedlist>
+ <listitem>REQUIEM_CLIENT_STATUS_EXIT_SUCCESS - Exiting the sensor is the expected behavior.</listitem>
+ <listitem>REQUIEM_CLIENT_STATUS_EXIT_FAILED - There is something wrong going on, notice the security analyst.</listitem>
+</itemizedlist> 
+
+<informalexample><programlisting>
+requiem_client_destroy(client, REQUIEM_CLIENT_STATUS_EXIT_SUCCESS);
+</programlisting></informalexample>
+
+As a side note, please remember that a persistant sensor should never use this function 
+(except maybe if it is working in batch mode), unless it want to report the 
+REQUIEM_CLIENT_STATUS_EXIT_FAILED exit status. This is also the case if your persistant sensor 
+is interrupted by a signal. 
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+#idmef_message_t
+#idmef_path_t
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### ENUM requiem_client_exit_status_t ##### -->
+<para>
+
+</para>
+
+@REQUIEM_CLIENT_EXIT_STATUS_SUCCESS: 
+@REQUIEM_CLIENT_EXIT_STATUS_FAILURE: 
+
+<!-- ##### ENUM requiem_client_flags_t ##### -->
+<para>
+
+</para>
+
+@REQUIEM_CLIENT_FLAGS_ASYNC_SEND: 
+@REQUIEM_CLIENT_FLAGS_ASYNC_TIMER: 
+@REQUIEM_CLIENT_FLAGS_HEARTBEAT: 
+@REQUIEM_CLIENT_FLAGS_CONNECT: 
+@REQUIEM_CLIENT_FLAGS_AUTOCONFIG: 
+
+<!-- ##### TYPEDEF requiem_client_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION requiem_client_get_unique_ident ##### -->
+<para>
+
+</para>
+
+@client: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_set_connection_pool ##### -->
+<para>
+
+</para>
+
+@client: 
+@pool: 
+
+
+<!-- ##### FUNCTION requiem_client_get_connection_pool ##### -->
+<para>
+
+</para>
+
+@client: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_start ##### -->
+<para>
+
+</para>
+
+@client: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_init ##### -->
+<para>
+
+</para>
+
+@client: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_new ##### -->
+<para>
+
+</para>
+
+@client: 
+@profile: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_ref ##### -->
+<para>
+
+</para>
+
+@client: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_get_analyzer ##### -->
+<para>
+
+</para>
+
+@client: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_get_flags ##### -->
+<para>
+
+</para>
+
+@client: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_set_required_permission ##### -->
+<para>
+
+</para>
+
+@client: 
+@permission: 
+
+
+<!-- ##### FUNCTION requiem_client_get_required_permission ##### -->
+<para>
+
+</para>
+
+@client: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_send_msg ##### -->
+<para>
+
+</para>
+
+@client: 
+@msg: 
+
+
+<!-- ##### FUNCTION requiem_client_recv_msg ##### -->
+<para>
+
+</para>
+
+@client: 
+@timeout: 
+@msg: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_set_heartbeat_cb ##### -->
+<para>
+
+</para>
+
+@client: 
+@cb: 
+
+
+<!-- ##### FUNCTION requiem_client_send_idmef ##### -->
+<para>
+
+</para>
+
+@client: 
+@msg: 
+
+
+<!-- ##### FUNCTION requiem_client_recv_idmef ##### -->
+<para>
+
+</para>
+
+@client: 
+@timeout: 
+@idmef: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_destroy ##### -->
+<para>
+
+</para>
+
+@client: 
+@status: 
+
+
+<!-- ##### FUNCTION requiem_client_set_flags ##### -->
+<para>
+
+</para>
+
+@client: 
+@flags: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_set_config_filename ##### -->
+<para>
+
+</para>
+
+@client: 
+@filename: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_get_config_filename ##### -->
+<para>
+
+</para>
+
+@client: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_is_setup_needed ##### -->
+<para>
+
+</para>
+
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_get_profile ##### -->
+<para>
+
+</para>
+
+@client: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_new_msgbuf ##### -->
+<para>
+
+</para>
+
+@client: 
+@msgbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_handle_msg_default ##### -->
+<para>
+
+</para>
+
+@client: 
+@msg: 
+@msgbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_get_setup_error ##### -->
+<para>
+
+</para>
+
+@client: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_client_print_setup_error ##### -->
+<para>
+
+</para>
+
+@client: 
+
+

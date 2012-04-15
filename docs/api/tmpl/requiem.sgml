@@ -1,0 +1,96 @@
+<!-- ##### SECTION Title ##### -->
+requiem
+
+<!-- ##### SECTION Short_Description ##### -->
+
+Initializing the library
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+Before any operation are done using the requiem library, the user first need 
+to initialize it using the requiem_init() function.
+
+<programlisting>
+int ret;
+
+ret = requiem_init(&amp;argc, argv);
+if ( ret &lt; 0 ) {
+        requiem_perror(ret, "unable to initialize the requiem library");
+        return -1;
+}
+</programlisting>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### MACRO LIBREQUIEM_VERSION ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION requiem_init ##### -->
+<para>
+
+</para>
+
+@argc: 
+@argv: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_deinit ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION requiem_check_version ##### -->
+<para>
+
+</para>
+
+@req_version: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_thread_init ##### -->
+<para>
+
+</para>
+
+@nil: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_fork_child ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION requiem_fork_parent ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION requiem_fork_prepare ##### -->
+<para>
+
+</para>
+
+
+

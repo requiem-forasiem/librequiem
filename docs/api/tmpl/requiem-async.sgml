@@ -1,0 +1,95 @@
+<!-- ##### SECTION Title ##### -->
+requiem-async
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### ENUM requiem_async_flags_t ##### -->
+<para>
+
+</para>
+
+@REQUIEM_ASYNC_FLAGS_TIMER: 
+
+<!-- ##### USER_FUNCTION requiem_async_callback_t ##### -->
+<para>
+
+</para>
+
+@object: 
+@data: 
+
+
+<!-- ##### MACRO REQUIEM_ASYNC_OBJECT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### STRUCT requiem_async_object_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION requiem_async_init ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_async_get_flags ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_async_set_flags ##### -->
+<para>
+
+</para>
+
+@flags: 
+
+
+<!-- ##### FUNCTION requiem_async_add ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### FUNCTION requiem_async_del ##### -->
+<para>
+
+</para>
+
+@obj: 
+
+
+<!-- ##### FUNCTION requiem_async_exit ##### -->
+<para>
+
+</para>
+
+
+

@@ -1,0 +1,52 @@
+# err-sources.h.in - List of error sources and their description input file.
+/* err-sources.h - List of error sources and their description.
+   Copyright (C) 2003, 2004 g10 Code GmbH
+
+   This file is part of libgpg-error.
+
+   libgpg-error is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public License
+   as published by the Free Software Foundation; either version 2.1 of
+   the License, or (at your option) any later version.
+ 
+   libgpg-error is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+ 
+   You should have received a copy of the GNU Lesser General Public
+   License along with libgpg-error; if not, write to the Free
+   Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+   02111-1307, USA.  */
+
+# Everything up to the first line that starts with a number in the
+# first column is copied into the output verbatim.  Then, empty lines
+# are ignored.  Other lines must have an error source number, followed
+# by one or more <tab> characters, followed by the error source
+# symbol, followed by one or more <tab> characters, followed by the
+# error source name.  Trailing whitespace is removed.  The error
+# sources should be sorted.  The last line should not have a number,
+# but only a <tab>, followed by a description for error sources that
+# are not in the list.
+
+0	REQUIEM_ERROR_SOURCE_UNKNOWN		Unspecified source
+1	REQUIEM_ERROR_SOURCE_IO			requiem-io
+2	REQUIEM_ERROR_SOURCE_MESSAGE		requiem-message
+3	REQUIEM_ERROR_SOURCE_FAILOVER		requiem-failover
+4	REQUIEM_ERROR_SOURCE_CLIENT		requiem-client
+5	REQUIEM_ERROR_SOURCE_CLIENT_PROFILE	requiem-client-profile
+6	REQUIEM_ERROR_SOURCE_EXTRACT		requiem-extract
+7	REQUIEM_ERROR_SOURCE_CONNECTION		requiem-connection
+8	REQUIEM_ERROR_SOURCE_CONNECTION_POOL	requiem-connection-pool
+9	REQUIEM_ERROR_SOURCE_CONFIG_ENGINE	config-file
+10	REQUIEM_ERROR_SOURCE_STRING		requiem-string
+11	REQUIEM_ERROR_SOURCE_IDMEF_TREE_WRAP	idmef-tree-wrap
+12	REQUIEM_ERROR_SOURCE_IDMEF_PATH		idmef-path
+13	REQUIEM_ERROR_SOURCE_IDMEF_TYPE		idmef-type
+14	REQUIEM_ERROR_SOURCE_IDMEF_MESSAGE_READ	idmef-message-read
+15	REQUIEM_ERROR_SOURCE_IDMEF_CRITERIA	idmef-criteria
+16	REQUIEM_ERROR_SOURCE_IDMEF_VALUE_TYPE	idmef-value-type
+
+255	REQUIEM_ERROR_SOURCE_REQUIEMDB		librequiemdb
+# 15 to 254 are free to be used.
+	REQUIEM_ERROR_SOURCE_DIM		Unknown source

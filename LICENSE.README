@@ -1,0 +1,16 @@
+This directory and its children contain LibRequiem, a library for using
+the Requiem framework.
+
+Copyright (C) 2005 PreludeIDS Technologies SARL. All rights reserved.
+
+This library is made available under a dual licensing scheme.
+
+If you link LibRequiem against other code all of which is itself
+licensed under the terms of the GNU General Public License version 2
+dated June 1991 ("GPL v2") or compatible, then you may use LibRequiem
+under the terms of the GPL v2,as appearing in the file COPYING.  If the
+file COPYING is missing, you can obtain a copy of the GPL v2 from the
+Free Software Foundation Inc., 51 Franklin St, Fifth Floor, Boston, MA
+02110-1301, USA.
+
+Please also read the information in the file HACKING.README.

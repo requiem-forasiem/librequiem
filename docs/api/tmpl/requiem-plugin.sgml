@@ -1,0 +1,333 @@
+<!-- ##### SECTION Title ##### -->
+requiem-plugin
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### MACRO lt_preloaded_symbols ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO REQUIEM_PLUGIN_API_VERSION ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### TYPEDEF requiem_plugin_entry_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### TYPEDEF requiem_plugin_instance_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO REQUIEM_PLUGIN_GENERIC ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### STRUCT requiem_plugin_generic_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO REQUIEM_PLUGIN_SET_PRELOADED_SYMBOLS ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO REQUIEM_PLUGIN_OPTION_DECLARE_STRING_CB ##### -->
+<para>
+
+</para>
+
+@prefix: 
+@type: 
+@name: 
+
+
+<!-- ##### MACRO requiem_plugin_get_name ##### -->
+<para>
+
+</para>
+
+@p: 
+
+
+<!-- ##### MACRO requiem_plugin_set_name ##### -->
+<para>
+
+</para>
+
+@p: 
+@str: 
+
+
+<!-- ##### MACRO requiem_plugin_set_destroy_func ##### -->
+<para>
+
+</para>
+
+@p: 
+@func: 
+
+
+<!-- ##### FUNCTION requiem_plugin_entry_set_plugin ##### -->
+<para>
+
+</para>
+
+@pe: 
+@pl: 
+
+
+<!-- ##### FUNCTION requiem_plugin_set_activation_option ##### -->
+<para>
+
+</para>
+
+@pe: 
+@opt: 
+@commit: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_plugin_instance_subscribe ##### -->
+<para>
+
+</para>
+
+@pi: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_plugin_instance_unsubscribe ##### -->
+<para>
+
+</para>
+
+@pi: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_plugin_new_instance ##### -->
+<para>
+
+</para>
+
+@pi: 
+@plugin: 
+@name: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_plugin_search_by_name ##### -->
+<para>
+
+</para>
+
+@head: 
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_plugin_search_instance_by_name ##### -->
+<para>
+
+</para>
+
+@head: 
+@pname: 
+@iname: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_plugin_instance_set_data ##### -->
+<para>
+
+</para>
+
+@pi: 
+@data: 
+
+
+<!-- ##### FUNCTION requiem_plugin_instance_get_data ##### -->
+<para>
+
+</para>
+
+@pi: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_plugin_instance_set_plugin_data ##### -->
+<para>
+
+</para>
+
+@pi: 
+@data: 
+
+
+<!-- ##### FUNCTION requiem_plugin_instance_get_plugin_data ##### -->
+<para>
+
+</para>
+
+@pi: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_plugin_instance_get_name ##### -->
+<para>
+
+</para>
+
+@pi: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_plugin_instance_get_plugin ##### -->
+<para>
+
+</para>
+
+@pi: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_plugin_load_from_dir ##### -->
+<para>
+
+</para>
+
+@head: 
+@dirname: 
+@symbol: 
+@ptr: 
+@subscribe: 
+@unsubscribe: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_plugin_instance_add ##### -->
+<para>
+
+</para>
+
+@pi: 
+@h: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_plugin_instance_del ##### -->
+<para>
+
+</para>
+
+@pi: 
+
+
+<!-- ##### FUNCTION requiem_plugin_instance_compute_time ##### -->
+<para>
+
+</para>
+
+@pi: 
+@start: 
+@end: 
+
+
+<!-- ##### FUNCTION requiem_plugin_instance_call_commit_func ##### -->
+<para>
+
+</para>
+
+@pi: 
+@err: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_plugin_instance_has_commit_func ##### -->
+<para>
+
+</para>
+
+@pi: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_plugin_set_preloaded_symbols ##### -->
+<para>
+
+</para>
+
+@symlist: 
+
+
+<!-- ##### FUNCTION requiem_plugin_get_next ##### -->
+<para>
+
+</para>
+
+@head: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_plugin_unload ##### -->
+<para>
+
+</para>
+
+@plugin: 
+
+
+<!-- ##### MACRO requiem_plugin_compute_stats ##### -->
+<para>
+
+</para>
+
+@pi: 
+@func: 
+
+
+<!-- ##### MACRO requiem_plugin_run ##### -->
+<para>
+
+</para>
+
+@pi: 
+@type: 
+@member: 
+@...: 
+
+

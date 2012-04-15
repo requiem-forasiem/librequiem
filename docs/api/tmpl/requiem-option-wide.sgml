@@ -1,0 +1,93 @@
+<!-- ##### SECTION Title ##### -->
+requiem-option-wide
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### MACRO REQUIEM_OPTION_REPLY_TYPE_SET ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO REQUIEM_OPTION_REPLY_TYPE_GET ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO REQUIEM_OPTION_REPLY_TYPE_LIST ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO REQUIEM_OPTION_REPLY_TYPE_ERROR ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION requiem_option_push_request ##### -->
+<para>
+
+</para>
+
+@msg: 
+@type: 
+@request: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_new_request ##### -->
+<para>
+
+</para>
+
+@msgbuf: 
+@request_id: 
+@target_id: 
+@size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_process_request ##### -->
+<para>
+
+</para>
+
+@client: 
+@msg: 
+@reply: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_recv_reply ##### -->
+<para>
+
+</para>
+
+@msg: 
+@source_id: 
+@request_id: 
+@value: 
+@Returns: 
+
+

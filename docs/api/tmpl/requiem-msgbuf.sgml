@@ -1,0 +1,123 @@
+<!-- ##### SECTION Title ##### -->
+requiem-msgbuf
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### TYPEDEF requiem_msgbuf_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ENUM requiem_msgbuf_flags_t ##### -->
+<para>
+
+</para>
+
+@REQUIEM_MSGBUF_FLAGS_ASYNC: 
+
+<!-- ##### FUNCTION requiem_msgbuf_new ##### -->
+<para>
+
+</para>
+
+@msgbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_msgbuf_destroy ##### -->
+<para>
+
+</para>
+
+@msgbuf: 
+
+
+<!-- ##### FUNCTION requiem_msgbuf_mark_end ##### -->
+<para>
+
+</para>
+
+@msgbuf: 
+
+
+<!-- ##### FUNCTION requiem_msgbuf_set ##### -->
+<para>
+
+</para>
+
+@msgbuf: 
+@tag: 
+@len: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_msgbuf_get_msg ##### -->
+<para>
+
+</para>
+
+@msgbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_msgbuf_set_callback ##### -->
+<para>
+
+</para>
+
+@msgbuf: 
+@send_msg: 
+
+
+<!-- ##### FUNCTION requiem_msgbuf_set_data ##### -->
+<para>
+
+</para>
+
+@msgbuf: 
+@data: 
+
+
+<!-- ##### FUNCTION requiem_msgbuf_get_data ##### -->
+<para>
+
+</para>
+
+@msgbuf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_msgbuf_set_flags ##### -->
+<para>
+
+</para>
+
+@msgbuf: 
+@flags: 
+
+
+<!-- ##### FUNCTION requiem_msgbuf_get_flags ##### -->
+<para>
+
+</para>
+
+@msgbuf: 
+@Returns: 
+
+

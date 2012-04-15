@@ -1,0 +1,627 @@
+<!-- ##### SECTION Title ##### -->
+requiem-option
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### ENUM requiem_option_type_t ##### -->
+<para>
+
+</para>
+
+@REQUIEM_OPTION_TYPE_CLI: 
+@REQUIEM_OPTION_TYPE_CFG: 
+@REQUIEM_OPTION_TYPE_WIDE: 
+@REQUIEM_OPTION_TYPE_CONTEXT: 
+@REQUIEM_OPTION_TYPE_ROOT: 
+@REQUIEM_OPTION_TYPE_DESTROY: 
+
+<!-- ##### ENUM requiem_option_input_type_t ##### -->
+<para>
+
+</para>
+
+@REQUIEM_OPTION_INPUT_TYPE_STRING: 
+@REQUIEM_OPTION_INPUT_TYPE_INTEGER: 
+@REQUIEM_OPTION_INPUT_TYPE_BOOLEAN: 
+
+<!-- ##### TYPEDEF requiem_option_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### TYPEDEF requiem_option_context_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### USER_FUNCTION requiem_option_destroy_callback_t ##### -->
+<para>
+
+</para>
+
+@opt: 
+@out: 
+@context: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION requiem_option_commit_callback_t ##### -->
+<para>
+
+</para>
+
+@opt: 
+@out: 
+@context: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION requiem_option_get_callback_t ##### -->
+<para>
+
+</para>
+
+@opt: 
+@out: 
+@context: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION requiem_option_set_callback_t ##### -->
+<para>
+
+</para>
+
+@opt: 
+@optarg: 
+@err: 
+@context: 
+@Returns: 
+
+
+<!-- ##### ENUM requiem_option_argument_t ##### -->
+<para>
+
+</para>
+
+@REQUIEM_OPTION_ARGUMENT_REQUIRED: 
+@REQUIEM_OPTION_ARGUMENT_OPTIONAL: 
+@REQUIEM_OPTION_ARGUMENT_NONE: 
+
+<!-- ##### ENUM requiem_option_priority_t ##### -->
+<para>
+
+</para>
+
+@REQUIEM_OPTION_PRIORITY_IMMEDIATE: 
+@REQUIEM_OPTION_PRIORITY_FIRST: 
+@REQUIEM_OPTION_PRIORITY_NONE: 
+@REQUIEM_OPTION_PRIORITY_LAST: 
+
+<!-- ##### ENUM requiem_option_warning_t ##### -->
+<para>
+
+</para>
+
+@REQUIEM_OPTION_WARNING_OPTION: 
+@REQUIEM_OPTION_WARNING_ARG: 
+
+<!-- ##### FUNCTION requiem_option_set_priority ##### -->
+<para>
+
+</para>
+
+@option: 
+@priority: 
+
+
+<!-- ##### FUNCTION requiem_option_print ##### -->
+<para>
+
+</para>
+
+@opt: 
+@type: 
+@descoff: 
+@fd: 
+
+
+<!-- ##### FUNCTION requiem_option_wide_send_msg ##### -->
+<para>
+
+</para>
+
+@msgbuf: 
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_destroy ##### -->
+<para>
+
+</para>
+
+@option: 
+
+
+<!-- ##### FUNCTION requiem_option_read ##### -->
+<para>
+
+</para>
+
+@option: 
+@filename: 
+@argc: 
+@argv: 
+@err: 
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_add ##### -->
+<para>
+
+</para>
+
+@parent: 
+@retopt: 
+@type: 
+@shortopt: 
+@longopt: 
+@desc: 
+@has_arg: 
+@set: 
+@get: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_set_type ##### -->
+<para>
+
+</para>
+
+@opt: 
+@type: 
+
+
+<!-- ##### FUNCTION requiem_option_get_type ##### -->
+<para>
+
+</para>
+
+@opt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_set_warnings ##### -->
+<para>
+
+</para>
+
+@new_warnings: 
+@old_warnings: 
+
+
+<!-- ##### FUNCTION requiem_option_get_shortname ##### -->
+<para>
+
+</para>
+
+@opt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_get_longname ##### -->
+<para>
+
+</para>
+
+@opt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_set_data ##### -->
+<para>
+
+</para>
+
+@opt: 
+@data: 
+
+
+<!-- ##### FUNCTION requiem_option_get_data ##### -->
+<para>
+
+</para>
+
+@opt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_context_get_data ##### -->
+<para>
+
+</para>
+
+@oc: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_context_set_data ##### -->
+<para>
+
+</para>
+
+@oc: 
+@data: 
+
+
+<!-- ##### FUNCTION requiem_option_invoke_commit ##### -->
+<para>
+
+</para>
+
+@opt: 
+@ctname: 
+@value: 
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_invoke_set ##### -->
+<para>
+
+</para>
+
+@opt: 
+@ctname: 
+@value: 
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_invoke_get ##### -->
+<para>
+
+</para>
+
+@opt: 
+@ctname: 
+@value: 
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_invoke_destroy ##### -->
+<para>
+
+</para>
+
+@opt: 
+@ctname: 
+@value: 
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_new_root ##### -->
+<para>
+
+</para>
+
+@retopt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_new ##### -->
+<para>
+
+</para>
+
+@parent: 
+@retopt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_set_longopt ##### -->
+<para>
+
+</para>
+
+@opt: 
+@longopt: 
+
+
+<!-- ##### FUNCTION requiem_option_get_longopt ##### -->
+<para>
+
+</para>
+
+@opt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_set_description ##### -->
+<para>
+
+</para>
+
+@opt: 
+@description: 
+
+
+<!-- ##### FUNCTION requiem_option_get_description ##### -->
+<para>
+
+</para>
+
+@opt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_set_has_arg ##### -->
+<para>
+
+</para>
+
+@opt: 
+@has_arg: 
+
+
+<!-- ##### FUNCTION requiem_option_get_has_arg ##### -->
+<para>
+
+</para>
+
+@opt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_set_value ##### -->
+<para>
+
+</para>
+
+@opt: 
+@value: 
+
+
+<!-- ##### FUNCTION requiem_option_get_value ##### -->
+<para>
+
+</para>
+
+@opt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_set_help ##### -->
+<para>
+
+</para>
+
+@opt: 
+@help: 
+
+
+<!-- ##### FUNCTION requiem_option_get_help ##### -->
+<para>
+
+</para>
+
+@opt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_set_input_validation_regex ##### -->
+<para>
+
+</para>
+
+@opt: 
+@regex: 
+
+
+<!-- ##### FUNCTION requiem_option_get_input_validation_regex ##### -->
+<para>
+
+</para>
+
+@opt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_set_input_type ##### -->
+<para>
+
+</para>
+
+@opt: 
+@input_type: 
+
+
+<!-- ##### FUNCTION requiem_option_get_input_type ##### -->
+<para>
+
+</para>
+
+@opt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_get_optlist ##### -->
+<para>
+
+</para>
+
+@opt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_get_next ##### -->
+<para>
+
+</para>
+
+@start: 
+@cur: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_has_optlist ##### -->
+<para>
+
+</para>
+
+@opt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_get_parent ##### -->
+<para>
+
+</para>
+
+@opt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_set_destroy_callback ##### -->
+<para>
+
+</para>
+
+@opt: 
+@destroy: 
+
+
+<!-- ##### FUNCTION requiem_option_get_destroy_callback ##### -->
+<para>
+
+</para>
+
+@opt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_set_set_callback ##### -->
+<para>
+
+</para>
+
+@opt: 
+@set: 
+
+
+<!-- ##### FUNCTION requiem_option_get_set_callback ##### -->
+<para>
+
+</para>
+
+@opt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_set_get_callback ##### -->
+<para>
+
+</para>
+
+@opt: 
+@get: 
+
+
+<!-- ##### FUNCTION requiem_option_get_get_callback ##### -->
+<para>
+
+</para>
+
+@opt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_set_commit_callback ##### -->
+<para>
+
+</para>
+
+@opt: 
+@commit: 
+
+
+<!-- ##### FUNCTION requiem_option_get_commit_callback ##### -->
+<para>
+
+</para>
+
+@opt: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_set_default_context ##### -->
+<para>
+
+</para>
+
+@opt: 
+@context: 
+
+
+<!-- ##### FUNCTION requiem_option_new_context ##### -->
+<para>
+
+</para>
+
+@opt: 
+@ctx: 
+@name: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_context_destroy ##### -->
+<para>
+
+</para>
+
+@oc: 
+
+
+<!-- ##### FUNCTION requiem_option_search ##### -->
+<para>
+
+</para>
+
+@parent: 
+@name: 
+@type: 
+@walk_children: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_option_search_context ##### -->
+<para>
+
+</para>
+
+@opt: 
+@name: 
+@Returns: 
+
+

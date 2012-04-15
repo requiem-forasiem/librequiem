@@ -1,0 +1,45 @@
+use Config;
+use ExtUtils::MakeMaker;
+use ExtUtils::MM_Unix;
+use File::Copy;
+use Cwd "abs_path";
+
+my %attributs = (NAME => 'Requiem',
+		 INC => '-I@top_srcdir@ -I@top_builddir@/src/include -I@top_srcdir@/src/include -I@top_builddir@/src/librequiem-error',
+		 LIBS => ["-L@top_builddir@/src/.libs -lrequiem", "-L$ENV{LIBDIR} -lrequiem @LIBREQUIEM_LIBS@ @LIBADD_DL@ @LTLIBTHREAD@" ],
+		 LDDLFLAGS => "-L@top_builddir@/src/.libs $Config{lddlflags}");
+
+if ( abs_path("@top_srcdir@") ne abs_path("@top_builddir@") ) {
+    foreach my $filename ( qw/Requiem.c Requiem.pm/ ) {
+	my $src = "@top_srcdir@/bindings/low-level/perl/$filename";
+	my $dst = "@top_builddir@/bindings/low-level/perl/$filename";
+	copy($src, $dst) if ( ! -e $dst );
+    }
+    $attributs{"clean"} = {FILES => join(" ", map { "@top_builddir@/bindings/low-level/perl/$_" } qw/Requiem.c Requiem.pm Makefile/)};
+}
+
+if ( -w $Config{"sitelib"} ) {
+    $attributs{"INSTALLDIRS"} = "site";
+} else {
+    $attributs{"PREFIX"} = "@prefix@";
+}
+
+WriteMakefile(%attributs);
+
+my($atime, $mtime) = (stat "Makefile.PL")[8,9];
+utime($atime + 1, $mtime + 1, "Makefile");
+
+
+package MY;
+
+sub install
+{
+    my $str = shift->SUPER::install(@_);
+    my @files = ((map { "\$(INSTALLSITEARCH)/$_" } qw/perllocal.pod Requiem.pm/),
+                 (map { "\$(INSTALLSITEARCH)/auto/Requiem/$_" } qw/Requiem.bs Requiem.so .packlist/),
+                 '$(INSTALLMAN3DIR)/Requiem.$(MAN3EXT)');
+
+    $str =~ s/(uninstall_from_sitedirs.+)\n.+\n/"$1\n\t\$(RM_F) " . join(" ", @files) . "\n"/e;
+
+    return $str;
+}

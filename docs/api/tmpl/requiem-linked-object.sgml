@@ -1,0 +1,40 @@
+<!-- ##### SECTION Title ##### -->
+requiem-linked-object
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### MACRO REQUIEM_LINKED_OBJECT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### STRUCT requiem_linked_object_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO requiem_linked_object_get_object ##### -->
+<para>
+
+</para>
+
+@object: 
+
+

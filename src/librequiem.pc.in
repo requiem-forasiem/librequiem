@@ -1,0 +1,14 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+threadlib=@LIBMULTITHREAD@
+
+Name: LibRequiem
+Description: The Requiem Library provide API for communicating with Requiem SIEM components.
+Version: @VERSION@
+Libs: -L${libdir} -lrequiem
+Libs.private: @LIBREQUIEM_LIBS@ @GETADDRINFO_LIB@ @HOSTENT_LIB@ @LIBINTL@ @LIBMULTITHREAD@ @SERVENT_LIB@
+Cflags: @LIBREQUIEM_CFLAGS@
+

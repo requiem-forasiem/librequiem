@@ -1,0 +1,2 @@
+include = @REQUIEM_CONFIG_DIR@/default/global.conf
+include = @REQUIEM_CONFIG_DIR@/default/client.conf

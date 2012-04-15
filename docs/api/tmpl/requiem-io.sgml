@@ -1,0 +1,225 @@
+<!-- ##### SECTION Title ##### -->
+requiem-io
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### TYPEDEF requiem_io_t ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION requiem_io_new ##### -->
+<para>
+
+</para>
+
+@ret: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_io_destroy ##### -->
+<para>
+
+</para>
+
+@pio: 
+
+
+<!-- ##### FUNCTION requiem_io_set_file_io ##### -->
+<para>
+
+</para>
+
+@pio: 
+@fd: 
+
+
+<!-- ##### FUNCTION requiem_io_set_tls_io ##### -->
+<para>
+
+</para>
+
+@pio: 
+@tls: 
+
+
+<!-- ##### FUNCTION requiem_io_set_sys_io ##### -->
+<para>
+
+</para>
+
+@pio: 
+@fd: 
+
+
+<!-- ##### FUNCTION requiem_io_set_buffer_io ##### -->
+<para>
+
+</para>
+
+@pio: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_io_set_fdptr ##### -->
+<para>
+
+</para>
+
+@pio: 
+@ptr: 
+
+
+<!-- ##### FUNCTION requiem_io_set_pending_callback ##### -->
+<para>
+
+</para>
+
+@pio: 
+@pending: 
+
+
+<!-- ##### FUNCTION requiem_io_set_read_callback ##### -->
+<para>
+
+</para>
+
+@pio: 
+@read: 
+
+
+<!-- ##### FUNCTION requiem_io_set_write_callback ##### -->
+<para>
+
+</para>
+
+@pio: 
+@write: 
+
+
+<!-- ##### FUNCTION requiem_io_close ##### -->
+<para>
+
+</para>
+
+@pio: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_io_read ##### -->
+<para>
+
+</para>
+
+@pio: 
+@buf: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_io_read_wait ##### -->
+<para>
+
+</para>
+
+@pio: 
+@buf: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_io_read_delimited ##### -->
+<para>
+
+</para>
+
+@pio: 
+@buf: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_io_write ##### -->
+<para>
+
+</para>
+
+@pio: 
+@buf: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_io_write_delimited ##### -->
+<para>
+
+</para>
+
+@pio: 
+@buf: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_io_forward ##### -->
+<para>
+
+</para>
+
+@dst: 
+@src: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_io_get_fd ##### -->
+<para>
+
+</para>
+
+@pio: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_io_get_fdptr ##### -->
+<para>
+
+</para>
+
+@pio: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_io_pending ##### -->
+<para>
+
+</para>
+
+@pio: 
+@Returns: 
+
+
+<!-- ##### FUNCTION requiem_io_is_error_fatal ##### -->
+<para>
+
+</para>
+
+@pio: 
+@error: 
+@Returns: 
+
+

@@ -1,0 +1,273 @@
+<!-- ##### SECTION Title ##### -->
+idmef-additional-data
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### FUNCTION idmef_additional_data_new_real ##### -->
+<para>
+
+</para>
+
+@ret: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_new_byte ##### -->
+<para>
+
+</para>
+
+@ret: 
+@byte: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_new_integer ##### -->
+<para>
+
+</para>
+
+@ret: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_new_boolean ##### -->
+<para>
+
+</para>
+
+@ret: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_new_character ##### -->
+<para>
+
+</para>
+
+@ret: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_set_real ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@data: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_set_byte ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@byte: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_set_integer ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@data: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_set_boolean ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@data: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_set_character ##### -->
+<para>
+
+</para>
+
+@ptr: 
+@data: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_new_byte_string_ref ##### -->
+<para>
+
+</para>
+
+@ad: 
+@data: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_set_byte_string_ref ##### -->
+<para>
+
+</para>
+
+@ad: 
+@data: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_new_byte_string_dup ##### -->
+<para>
+
+</para>
+
+@ad: 
+@data: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_set_byte_string_dup ##### -->
+<para>
+
+</para>
+
+@ad: 
+@data: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_new_byte_string_nodup ##### -->
+<para>
+
+</para>
+
+@ad: 
+@data: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_set_byte_string_nodup ##### -->
+<para>
+
+</para>
+
+@ad: 
+@data: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_copy_ref ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_copy_dup ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_get_real ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_get_integer ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_get_boolean ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_get_character ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_get_byte ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_get_len ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_is_empty ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_additional_data_data_to_string ##### -->
+<para>
+
+</para>
+
+@ad: 
+@out: 
+@Returns: 
+
+

@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
+  <bookinfo>
+    <title>Requiem library Reference Manual</title>
+  </bookinfo>
+
+  <part>
+    <title>Using librequiem to interoperate with requiem-manager</title>
+    <xi:include href="xml/requiem.xml"/>
+    <xi:include href="xml/requiem-client.xml"/>
+  </part>
+
+  <part>
+    <title>Sending events with librequiem</title>
+    <chapter>
+      <title>The low level IDMEF API</title>
+      <xi:include href="xml/idmef-tree-wrap.xml"/>
+      <xi:include href="xml/idmef-additional-data.xml"/>
+      <xi:include href="xml/idmef-time.xml"/>
+      <xi:include href="xml/idmef-data.xml"/>
+    </chapter>
+
+    <chapter>
+      <title>The high level IDMEF API</title>
+      <xi:include href="xml/idmef-path.xml"/>
+      <xi:include href="xml/idmef-value.xml"/>
+    </chapter>
+  </part>
+
+  <part>
+    <title>Reading events from the collector</title>
+    <xi:include href="xml/idmef-message-read.xml"/>
+    <xi:include href="xml/requiem-connection-pool.xml"/>
+  </part>
+
+  <part>
+    <title>Filtering operation on IDMEF messages</title>
+    <xi:include href="xml/idmef-criteria.xml"/>
+    <xi:include href="xml/idmef-criterion-value.xml"/>
+  </part>
+
+  <chapter>
+    <title>Utility functions</title>
+    <xi:include href="xml/idmef-message-print.xml"/>
+  </chapter>
+
+  <chapter>
+    <title>Others</title>
+    <xi:include href="xml/requiem-error.xml"/>
+    <xi:include href="xml/requiem-linked-object.xml"/>
+    <xi:include href="xml/requiem-io.xml"/>
+    <xi:include href="xml/requiem-log.xml"/>
+    <xi:include href="xml/requiem-msg.xml"/>
+    <xi:include href="xml/requiem-option.xml"/>
+    <xi:include href="xml/requiem-connection.xml"/>
+    <xi:include href="xml/requiem-string.xml"/>
+    <xi:include href="xml/requiem-msgbuf.xml"/>
+    <xi:include href="xml/idmef-message-write.xml"/>
+    <xi:include href="xml/requiem-ident.xml"/>
+    <xi:include href="xml/requiem-client-profile.xml"/>
+    <xi:include href="xml/requiem-plugin.xml"/>
+    <xi:include href="xml/requiem-hash.xml"/>
+    <xi:include href="xml/requiem-failover.xml"/>
+    <xi:include href="xml/requiem-async.xml"/>
+    <xi:include href="xml/requiem-list.xml"/>
+    <xi:include href="xml/requiem-inttypes.xml"/>
+    <xi:include href="xml/requiem-option-wide.xml"/>
+    <xi:include href="xml/requiem-timer.xml"/>
+  </chapter>
+</book>

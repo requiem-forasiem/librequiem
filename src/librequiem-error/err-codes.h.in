@@ -1,0 +1,108 @@
+# err-codes.h.in - List of error codes and their description input file.
+/* err-codes.h - List of error codes and their description.
+   Copyright (C) 2003, 2004 g10 Code GmbH
+
+   This file is part of libgpg-error.
+
+   libgpg-error is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public License
+   as published by the Free Software Foundation; either version 2.1 of
+   the License, or (at your option) any later version.
+ 
+   libgpg-error is distributed in the hope that it will be useful, but
+   WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+ 
+   You should have received a copy of the GNU Lesser General Public
+   License along with libgpg-error; if not, write to the Free
+   Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+   02111-1307, USA.  */
+
+# Everything up to the first line that starts with a number in the
+# first column is copied into the output verbatim.  Then, empty lines
+# are ignored.  Other lines must have an error code number, followed
+# by one or more <tab> characters, followed by the error code symbol,
+# followed by one or more <tab> characters, followed by the error
+# message.  Trailing whitespace is removed.  The error codes should be
+# sorted.  The last line should not have a number, but only a <tab>,
+# followed by a dummy field, followed by a <tab>, followed by a
+# description for error codes that are not in the list.
+
+0	REQUIEM_ERROR_NO_ERROR		Success
+1	REQUIEM_ERROR_GENERIC		Unknown generic error
+2	REQUIEM_ERROR_TLS		Unknown TLS error
+3	REQUIEM_ERROR_INVAL_LENGTH	Invalid length specified
+4	REQUIEM_ERROR_INVAL_MESSAGE	Invalid message
+5	REQUIEM_ERROR_PROTOCOL_VERSION	Invalid protocol version
+6	REQUIEM_ERROR_EOF		End of file
+8	REQUIEM_ERROR_PROFILE		Client profile does not exist or have wrong permissions
+
+16	REQUIEM_ERROR_TLS_AUTH_REJECTED		Peer rejected authentication
+
+17	REQUIEM_ERROR_INVAL_INT8	Buffer does not contain a 8 bits integer
+18	REQUIEM_ERROR_INVAL_INT16	Buffer does not contain a 16 bits integer
+19	REQUIEM_ERROR_INVAL_INT32	Buffer does not contain a 32 bits integer
+20	REQUIEM_ERROR_INVAL_INT64	Buffer does not contain a 64 bits integer
+21	REQUIEM_ERROR_INVAL_FLOAT	Buffer does not contain a 32 bits float
+22	REQUIEM_ERROR_INVAL_CHAR	Buffer is not zero terminated
+23	REQUIEM_ERROR_INVAL_IDMEF_TIME	Buffer does not contain an IDMEF time type
+24	REQUIEM_ERROR_CONNECTION_STRING	No connection information provided
+
+25	REQUIEM_ERROR_IDMEF_VALUE_TYPE_UNKNOWN	Unknown IDMEF value type
+26	REQUIEM_ERROR_IDMEF_VALUE_TYPE_COPY_UNAVAILABLE	Copy operation unavailable for specified IDMEF type
+27	REQUIEM_ERROR_IDMEF_VALUE_TYPE_CLONE_UNAVAILABLE	Clone operation unavailable for specified IDMEF type
+28	REQUIEM_ERROR_IDMEF_VALUE_TYPE_COMPARE_UNAVAILABLE	Compare operation unavailable for specified IDMEF type
+29	REQUIEM_ERROR_IDMEF_VALUE_TYPE_READ_UNAVAILABLE	Read operation unavailable for specified IDMEF type
+30	REQUIEM_ERROR_IDMEF_VALUE_TYPE_WRITE_UNAVAILABLE	Write operation unavailable for specified IDMEF type
+31	REQUIEM_ERROR_IDMEF_VALUE_TYPE_COMPARE_MISMATCH	Can not compare data of different type
+32	REQUIEM_ERROR_IDMEF_VALUE_TYPE_PARSE	Could not parse IDMEF value
+
+33	REQUIEM_ERROR_IDMEF_CLASS_UNKNOWN	Unknown IDMEF class specified
+34	REQUIEM_ERROR_IDMEF_CLASS_UNKNOWN_CHILD	Unknown IDMEF child specified
+35	REQUIEM_ERROR_IDMEF_CLASS_UNKNOWN_NAME	Unknown IDMEF element name
+
+36	REQUIEM_ERROR_IDMEF_PATH_LENGTH		IDMEF path name too long
+37	REQUIEM_ERROR_IDMEF_PATH_DEPTH		IDMEF path maximum depth exceeded
+38	REQUIEM_ERROR_IDMEF_PATH_PARENT_ROOT	Can not make parent from IDMEF root path
+39	REQUIEM_ERROR_IDMEF_PATH_NTH		Specified object index does not exist
+40	REQUIEM_ERROR_IDMEF_PATH_MISS_INDEX	Listed element require an index to be specified
+41	REQUIEM_ERROR_IDMEF_PATH_INTEGRITY	Element integrity failed
+42	REQUIEM_ERROR_IDMEF_PATH_INDEX_RESERVED	Provided index value is reserved
+43	REQUIEM_ERROR_IDMEF_PATH_INDEX_FORBIDDEN	Element forbid indexing
+44	REQUIEM_ERROR_IDMEF_PATH_INDEX_UNDEFINED	Element index is undefined
+45	REQUIEM_ERROR_IDMEF_TREE_INDEX_UNDEFINED	An index below the one specified is undefined
+46	REQUIEM_ERROR_IDMEF_UNKNOWN_ENUM_STRING		Unknown enumeration string
+47	REQUIEM_ERROR_IDMEF_UNKNOWN_TAG			IDMEF message tag is unknown
+
+48	REQUIEM_ERROR_DAEMONIZE_LOCK_HELD	File lock is held by another process
+49	REQUIEM_ERROR_PLUGIN_LTDL_INIT		Unable to initialize LTDL
+		
+50	REQUIEM_ERROR_STRING_NOT_NULL_TERMINATED	String is not 'nul' terminated
+51	REQUIEM_ERROR_CANT_RESOLVE		Could not resolve address
+
+52	REQUIEM_ERROR_UNKNOWN_PERMISSION_TYPE	Specified permission type is unknown
+53	REQUIEM_ERROR_UNKNOWN_PERMISSION_BIT	Specified permission bit is not known
+
+55	REQUIEM_ERROR_IDMEF_CRITERIA_PARSE	Could not parse IDMEF criteria
+56	REQUIEM_ERROR_IDMEF_CRITERION_UNSUPPORTED_OPERATOR	Unsupported criterion operator
+57	REQUIEM_ERROR_IDMEF_CRITERION_INVALID_REGEX	Criterion regular expression is not valid
+
+58	REQUIEM_ERROR_TLS_WARNING_ALERT		TLS layer returned a warning alert
+59	REQUIEM_ERROR_TLS_FATAL_ALERT		TLS layer returned a fatal alert
+
+60	REQUIEM_ERROR_IDMEF_CLASS_CHILD_NOT_CLASS	IDMEF child is not a class
+61	REQUIEM_ERROR_ASSERTION			Critical assertion occurred
+62	REQUIEM_ERROR_IDMEF_VALUE_TYPE_REF_UNAVAILABLE	Reference operation unavailable for specified IDMEF type
+
+
+
+#62 to 16381 are free to be used.
+
+16382	REQUIEM_ERROR_UNKNOWN_ERRNO		Unknown system error
+
+# 16384 - 32767 are reserved for future extensions.
+
+# REQUIEM_ERROR_SYSTEM_ERROR | (141 to 32767) are to be used for system errors.
+
+	REQUIEM_ERROR_CODE_DIM		Unknown error code

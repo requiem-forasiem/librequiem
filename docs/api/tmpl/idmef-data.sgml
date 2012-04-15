@@ -1,0 +1,584 @@
+<!-- ##### SECTION Title ##### -->
+idmef-data
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### ENUM idmef_data_type_t ##### -->
+<para>
+
+</para>
+
+@IDMEF_DATA_TYPE_UNKNOWN: 
+@IDMEF_DATA_TYPE_CHAR: 
+@IDMEF_DATA_TYPE_BYTE: 
+@IDMEF_DATA_TYPE_UINT32: 
+@IDMEF_DATA_TYPE_UINT64: 
+@IDMEF_DATA_TYPE_FLOAT: 
+@IDMEF_DATA_TYPE_CHAR_STRING: 
+@IDMEF_DATA_TYPE_BYTE_STRING: 
+
+<!-- ##### STRUCT data ##### -->
+<para>
+
+</para>
+
+@refcount: 
+@flags: 
+@type: 
+@len: 
+
+<!-- ##### FUNCTION idmef_data_new ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_ref ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_new_char ##### -->
+<para>
+
+</para>
+
+@data: 
+@c: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_new_byte ##### -->
+<para>
+
+</para>
+
+@data: 
+@i: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_new_uint32 ##### -->
+<para>
+
+</para>
+
+@data: 
+@i: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_new_uint64 ##### -->
+<para>
+
+</para>
+
+@data: 
+@i: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_new_float ##### -->
+<para>
+
+</para>
+
+@data: 
+@f: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_set_char ##### -->
+<para>
+
+</para>
+
+@data: 
+@c: 
+
+
+<!-- ##### FUNCTION idmef_data_set_byte ##### -->
+<para>
+
+</para>
+
+@data: 
+@i: 
+
+
+<!-- ##### FUNCTION idmef_data_set_uint32 ##### -->
+<para>
+
+</para>
+
+@data: 
+@i: 
+
+
+<!-- ##### FUNCTION idmef_data_set_uint64 ##### -->
+<para>
+
+</para>
+
+@data: 
+@i: 
+
+
+<!-- ##### FUNCTION idmef_data_set_float ##### -->
+<para>
+
+</para>
+
+@data: 
+@f: 
+
+
+<!-- ##### FUNCTION idmef_data_set_ptr_dup_fast ##### -->
+<para>
+
+</para>
+
+@data: 
+@type: 
+@ptr: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_set_ptr_ref_fast ##### -->
+<para>
+
+</para>
+
+@data: 
+@type: 
+@ptr: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_set_ptr_nodup_fast ##### -->
+<para>
+
+</para>
+
+@data: 
+@type: 
+@ptr: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_new_ptr_dup_fast ##### -->
+<para>
+
+</para>
+
+@data: 
+@type: 
+@ptr: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_new_ptr_ref_fast ##### -->
+<para>
+
+</para>
+
+@data: 
+@type: 
+@ptr: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_new_ptr_nodup_fast ##### -->
+<para>
+
+</para>
+
+@data: 
+@type: 
+@ptr: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_set_char_string_dup_fast ##### -->
+<para>
+
+</para>
+
+@data: 
+@str: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_new_char_string_dup_fast ##### -->
+<para>
+
+</para>
+
+@data: 
+@str: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_new_char_string_ref_fast ##### -->
+<para>
+
+</para>
+
+@data: 
+@ptr: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_new_char_string_nodup_fast ##### -->
+<para>
+
+</para>
+
+@data: 
+@ptr: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_set_char_string_ref_fast ##### -->
+<para>
+
+</para>
+
+@data: 
+@ptr: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_set_char_string_nodup_fast ##### -->
+<para>
+
+</para>
+
+@data: 
+@ptr: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_new_char_string_ref ##### -->
+<para>
+
+</para>
+
+@data: 
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_new_char_string_dup ##### -->
+<para>
+
+</para>
+
+@data: 
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_new_char_string_nodup ##### -->
+<para>
+
+</para>
+
+@data: 
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_set_char_string_ref ##### -->
+<para>
+
+</para>
+
+@data: 
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_set_char_string_dup ##### -->
+<para>
+
+</para>
+
+@data: 
+@ptr: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_set_char_string_nodup ##### -->
+<para>
+
+</para>
+
+@data: 
+@ptr: 
+@Returns: 
+
+
+<!-- ##### MACRO idmef_data_set_char_string_constant ##### -->
+<para>
+
+</para>
+
+@string: 
+@str: 
+
+
+<!-- ##### FUNCTION idmef_data_new_byte_string_ref ##### -->
+<para>
+
+</para>
+
+@data: 
+@ptr: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_new_byte_string_dup ##### -->
+<para>
+
+</para>
+
+@data: 
+@ptr: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_new_byte_string_nodup ##### -->
+<para>
+
+</para>
+
+@data: 
+@ptr: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_set_byte_string_ref ##### -->
+<para>
+
+</para>
+
+@data: 
+@ptr: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_set_byte_string_dup ##### -->
+<para>
+
+</para>
+
+@data: 
+@ptr: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_set_byte_string_nodup ##### -->
+<para>
+
+</para>
+
+@data: 
+@ptr: 
+@len: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_destroy ##### -->
+<para>
+
+</para>
+
+@data: 
+
+
+<!-- ##### FUNCTION idmef_data_copy_ref ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_copy_dup ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_clone ##### -->
+<para>
+
+</para>
+
+@src: 
+@dst: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_get_type ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_get_len ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_get_data ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_get_char ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_get_byte ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_get_uint32 ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_get_uint64 ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_get_float ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_get_char_string ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_get_byte_string ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_is_empty ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_to_string ##### -->
+<para>
+
+</para>
+
+@data: 
+@out: 
+@Returns: 
+
+
+<!-- ##### FUNCTION idmef_data_destroy_internal ##### -->
+<para>
+
+</para>
+
+@data: 
+
+
