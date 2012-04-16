@@ -63,9 +63,6 @@ How to install the Requiem Library
 
 1. Requiem Library installation
 
-If you don't want to build the Requiem Library yourself, you can get 
-prebuild rpm and debian packages at http://www.requiem-ids.org.
-
 If you want to build Requiem, unpack the tarball and cd into the
 newly created directory. Then type :
 
